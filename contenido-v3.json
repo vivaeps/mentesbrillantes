@@ -1,17 +1,23 @@
 {
-  "version": 1,
+  "version": 2,
   "meta": {
     "title": "Mentes Brillantes V3",
-    "subtitle": "Look Gamma + capacitación gamificada",
+    "subtitle": "Trivia Demo Day · Grupo 1A",
     "editar": "Cada misión usa: caso, q, a (4 opciones), c (índice 0-3), ok, bad, tip."
+  },
+  "ui": {
+    "startBg": "image/v3/bg/start-clean.png",
+    "finalBg": "image/v3/bg/final-clean.png",
+    "logo": "image/v3/bg/logo.png",
+    "timerSec": 10
   },
   "worlds": [
     {
-      "name": "Estrategia de Innovación",
-      "topic": "ESTRATEGIA",
-      "c": "#a855f7",
-      "cd": "#4c1d95",
-      "cl": "#e9d5ff",
+      "name": "Viva 1A IPS",
+      "topic": "VIVA 1A",
+      "c": "#0091d5",
+      "cd": "#0d2b4e",
+      "cl": "#dbeafe",
       "monster": "Sombra de la Duda",
       "icon": "image/v2/world-estrategia.png",
       "hero": {
@@ -20,85 +26,99 @@
         "anim": "doctor"
       },
       "briefing": {
-        "goal": "Aprenderás a alinear la innovación con los objetivos del negocio y a decidir dónde jugar.",
-        "threat": "La Sombra de la Duda aparece cuando el equipo improvisa sin rumbo estratégico.",
-        "context": "En una EPS, cada iniciativa compite por tiempo clínico, presupuesto y atención de la dirección."
+        "goal": "Demuestra lo que sabes sobre Viva 1A IPS: qué es, su radar, gobierno, proceso, cultura y retos de innovación.",
+        "threat": "La Sombra de la Duda aparece cuando el equipo no conoce el sistema de innovación de Viva 1A.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day · Cámara de Comercio de Bogotá · Sello BPI."
       },
       "learnings": [
-        "La innovación empieza alineada a objetivos del negocio, no a la tecnología de moda.",
-        "El portafolio equilibra corto, mediano y largo plazo.",
-        "Una buena estrategia responde: dónde jugar y cómo ganar."
+        "Viva 1A es una IPS ambulatoria con énfasis en atención primaria.",
+        "El Sponsor Ejecutivo de Innovación es el Gerente General.",
+        "AICURA es el reto B2C digital en construcción nacido de este sistema."
       ],
       "missions": [
         {
-          "caso": "Un área propone comprar una app de moda porque 'todas las EPS la usan'. No hay vínculo claro con metas de experiencia o costos.",
-          "q": "¿Cuál es el mejor punto de partida?",
+          "caso": "Presentación institucional de Viva 1A IPS en el Sistema Mentes Brillantes.",
+          "q": "¿Qué es Viva 1A IPS?",
           "a": [
-            "Comprar la tecnología de moda",
-            "Alinear la idea con objetivos del negocio",
-            "Copiar a la competencia",
-            "Crear un eslogan creativo"
+            "Una plataforma de software para el sector salud",
+            "Una institución prestadora de servicios de salud ambulatoria con énfasis en atención primaria",
+            "Una red de startups de innovación",
+            "Un programa de cultura de innovación"
           ],
           "c": 1,
-          "ok": "Correcto: primero se define el problema de negocio y el resultado esperado.",
-          "bad": "Empezar por la herramienta suele generar proyectos costosos sin impacto.",
-          "tip": "Pregunta: ¿qué indicador mejora si esto funciona?"
+          "ok": "Correcto: Viva 1A IPS es una institución prestadora de servicios de salud ambulatoria con énfasis en atención primaria.",
+          "bad": "No es software, ni una red de startups, ni solo un programa cultural: es una IPS ambulatoria de atención primaria.",
+          "tip": "Recuerda el rol asistencial de Viva 1A: atención primaria ambulatoria."
         },
         {
-          "caso": "El call center mejora scripts y tiempos de respuesta cada mes. No es un cambio radical, pero reduce quejas.",
-          "q": "¿Qué tipo de innovación es?",
+          "caso": "El equipo revisa el radar de innovación de Viva 1A para priorizar focos.",
+          "q": "Según el radar de innovación, ¿en qué focos tiene Viva 1A sus mayores brechas?",
           "a": [
-            "Innovación incremental",
-            "Innovación disruptiva",
-            "Innovación accidental",
-            "Innovación decorativa"
-          ],
-          "c": 0,
-          "ok": "Es incremental: mejora continua de un proceso existente.",
-          "bad": "No todo cambio grande es disruptivo; aquí hay mejora gradual.",
-          "tip": "Documenta mejoras pequeñas: suman valor real al afiliado."
-        },
-        {
-          "caso": "Se lanza un canal digital que permite autorizar servicios en minutos y cambia la forma de atender.",
-          "q": "¿Qué tipo de innovación describe mejor este caso?",
-          "a": [
-            "Innovación incremental",
-            "Innovación cosmética",
-            "Innovación disruptiva",
-            "Innovación operativa menor"
+            "Performance de producto y sistema de producto",
+            "Cultura y gestión del conocimiento",
+            "Procesos, modelo de negocio y segmento B2C",
+            "Innovación abierta y proceso"
           ],
           "c": 2,
-          "ok": "Crea una forma nueva de operar y cambia las reglas del juego.",
-          "bad": "Si cambia el modelo de atención, no es solo un ajuste cosmético.",
-          "tip": "Identifica si el valor es 'mejorar lo actual' o 'hacerlo distinto'."
+          "ok": "Correcto: las mayores brechas están en procesos, modelo de negocio y segmento B2C.",
+          "bad": "El radar señala brechas prioritarias en procesos, modelo de negocio y B2C.",
+          "tip": "Al priorizar innovación, mira primero las brechas del radar, no solo las ideas más ruidosas."
         },
         {
-          "caso": "Hay 20 ideas en curso: unas para este trimestre, otras a 2 años. Nadie ve el equilibrio del portafolio.",
-          "q": "¿Para qué sirve un portafolio de innovación?",
+          "caso": "Se define el gobierno de innovación de Viva 1A y sus roles clave.",
+          "q": "En el gobierno de Viva 1A, ¿quién ejerce como Sponsor Ejecutivo de Innovación?",
           "a": [
-            "Archivar ideas rechazadas",
-            "Guardar logos de la empresa",
-            "Medir asistencia del personal",
-            "Balancear corto, mediano y largo plazo"
+            "El Chief de Innovación Corporativo",
+            "La Gerencia de Prestación",
+            "El Gerente General",
+            "El CIO"
           ],
-          "c": 3,
-          "ok": "El portafolio evita poner todo en un solo horizonte de tiempo.",
-          "bad": "Sin balance, se satura el corto plazo y se abandona el futuro.",
-          "tip": "Clasifica iniciativas por impacto y horizonte temporal."
+          "c": 2,
+          "ok": "Correcto: el Sponsor Ejecutivo de Innovación es el Gerente General.",
+          "bad": "En Viva 1A el sponsorship ejecutivo de innovación lo ejerce el Gerente General.",
+          "tip": "Sin sponsor ejecutivo, la innovación se queda en ideas sin respaldo."
         },
         {
-          "caso": "Dirección pide 'una estrategia de innovación'. El equipo no sabe qué debe responder ese documento.",
-          "q": "¿Qué debe responder una buena estrategia?",
+          "caso": "Una idea ya aprobada avanza en el proceso de innovación.",
+          "q": "En la fase de proceso donde la idea aprobada avanza, ¿qué se le calcula además de priorizarla y clasificarla?",
           "a": [
-            "Cuántas reuniones hacer al mes",
-            "Dónde jugar y cómo ganar",
-            "Qué colores usar en la marca",
-            "Quién llega más temprano"
+            "El presupuesto anual",
+            "El retorno",
+            "El número de embajadores",
+            "La antigüedad del creador"
           ],
           "c": 1,
-          "ok": "Define arenas de juego y la ventaja con la que se gana.",
-          "bad": "Una lista de reuniones no es estrategia.",
-          "tip": "Escribe en una frase: para quién innovamos y qué resultado buscamos."
+          "ok": "Correcto: además de priorizarla y clasificarla, se calcula el retorno.",
+          "bad": "En esa fase se calcula el retorno de la idea, no la antigüedad del creador ni el número de embajadores.",
+          "tip": "Priorizar sin estimar retorno es avanzar a ciegas."
+        },
+        {
+          "caso": "El área de talento quiere medir la capacidad de innovación del personal.",
+          "q": "¿Cómo se mide la capacidad de innovación de cada persona en Viva 1A?",
+          "a": [
+            "Solo con los resultados del piloto implementado",
+            "Con autoevaluación y la mirada del líder directo",
+            "Solo con un examen técnico anual",
+            "Solo con la evaluación del Comité Chief"
+          ],
+          "c": 1,
+          "ok": "Correcto: se mide con autoevaluación y la mirada del líder directo.",
+          "bad": "No depende solo de un examen o del Comité Chief: combina autoevaluación y visión del líder.",
+          "tip": "La capacidad de innovar se construye y se observa en el día a día, no solo en un piloto."
+        },
+        {
+          "caso": "El equipo presenta los retos de innovación nacidos del sistema Mentes Brillantes.",
+          "q": "¿Qué reto de innovación de Viva 1A está hoy en construcción y nació de este sistema?",
+          "a": [
+            "Continuum",
+            "Innovaitors",
+            "OMMEDICALL",
+            "AICURA, producto B2C digital"
+          ],
+          "c": 3,
+          "ok": "Correcto: AICURA, producto B2C digital, está en construcción y nació de este sistema.",
+          "bad": "El reto de Viva 1A en construcción es AICURA (B2C digital), no Continuum ni OMMEDICALL.",
+          "tip": "Asocia cada organización con su reto: Viva 1A → AICURA."
         }
       ],
       "bg": {
@@ -111,98 +131,112 @@
       "charAvatar": "image/v3/bg/w1-estrategia-char.png"
     },
     {
-      "name": "Gobierno de Innovación",
-      "topic": "GOBIERNO",
-      "c": "#f97316",
+      "name": "Everest Intelligent",
+      "topic": "EVEREST",
+      "c": "#ed7d31",
       "cd": "#7c2d12",
       "cl": "#ffedd5",
       "monster": "Barón de la Burocracia",
       "icon": "image/v2/world-gobierno.png",
       "hero": {
-        "name": "Enfermera Seren",
+        "name": "Enf. Elowen",
         "img": "image/enfermera.png",
         "anim": "enfermera"
       },
       "briefing": {
-        "goal": "Aprenderás roles, decisiones y reglas claras para que la innovación avance sin atascarse.",
-        "threat": "El Barón de la Burocracia crece cuando nadie sabe quién decide ni con qué criterios.",
-        "context": "En salud, la gobernanza protege al paciente y también acelera lo que sí debe moverse."
+        "goal": "Demuestra lo que sabes sobre Everest Intelligent: qué es, su gobierno, proceso, evaluación, cultura y retos.",
+        "threat": "El Barón de la Burocracia gana cuando nadie recuerda cómo funciona el sistema de innovación de Everest.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day · Cámara de Comercio de Bogotá · Sello BPI."
       },
       "learnings": [
-        "Gobierno de innovación define quién decide, con qué criterios y en qué tiempo.",
-        "Los comités sirven si desbloquean, no si solo revisan.",
-        "Riesgo y compliance se diseñan junto a la velocidad, no después."
+        "Everest Intelligent es el software clínico-administrativo de IPS, EPS y operadores.",
+        "En la fase Diseña, el Embajador de Innovación conceptualiza con el Creador.",
+        "Continuum es el reto de Everest nacido de este sistema, hoy en prototipo."
       ],
       "missions": [
         {
-          "caso": "Una idea clínica lleva 4 meses en correos. Nadie sabe quién da el 'sí' final.",
-          "q": "¿Qué falla primero en este gobierno?",
+          "caso": "Presentación institucional de Everest Intelligent en el Sistema Mentes Brillantes.",
+          "q": "¿Qué es Everest Intelligent?",
           "a": [
-            "Falta de un dueño de decisión claro",
-            "Falta de más reuniones",
-            "Falta de un logo nuevo",
-            "Falta de más herramientas"
-          ],
-          "c": 0,
-          "ok": "Sin rol decisor, el proceso se vuelve interminable.",
-          "bad": "Más reuniones sin dueño de decisión no desbloquean.",
-          "tip": "Nombra sponsor, líder y decisor por iniciativa."
-        },
-        {
-          "caso": "Un comité pide 12 firmas para un piloto de 30 afiliados.",
-          "q": "¿Cuál es la mejor práctica?",
-          "a": [
-            "Exigir las 12 firmas siempre",
-            "Adaptar controles al tamaño y riesgo del piloto",
-            "Saltar todos los controles",
-            "Cancelar el piloto"
+            "Una aseguradora de salud",
+            "El software que usan IPS, EPS y operadores de salud para su información clínica y administrativa",
+            "Una IPS de atención presencial",
+            "Una red de aliados externos"
           ],
           "c": 1,
-          "ok": "Gobierno proporcional: más control donde hay más riesgo.",
-          "bad": "El mismo trámite para todo mata la experimentación.",
-          "tip": "Define umbrales: piloto chico ≠ despliegue masivo."
+          "ok": "Correcto: Everest Intelligent es el software que usan IPS, EPS y operadores para información clínica y administrativa.",
+          "bad": "No es una aseguradora ni una IPS presencial: es el software clínico-administrativo del ecosistema.",
+          "tip": "Piensa en Everest como la plataforma de información, no como el prestador."
         },
         {
-          "caso": "Legal y TI llegan al final del proyecto y lo detienen por cumplimiento.",
-          "q": "¿Cuándo deben involucrarse áreas de control?",
+          "caso": "Se revisa el gobierno de innovación de Everest y sus roles.",
+          "q": "En el gobierno de Everest, ¿quién ejerce como Sponsor Ejecutivo?",
           "a": [
-            "Solo al final",
-            "Desde el diseño del piloto",
-            "Nunca",
-            "Solo si hay queja"
+            "El Chief de Innovación Corporativo",
+            "El Líder de Innovación",
+            "El Gerente General",
+            "El CIO"
+          ],
+          "c": 2,
+          "ok": "Correcto: el Sponsor Ejecutivo es el Gerente General.",
+          "bad": "En Everest el Sponsor Ejecutivo también es el Gerente General.",
+          "tip": "El sponsorship ejecutivo da prioridad y recursos a la innovación."
+        },
+        {
+          "caso": "Una idea entra a la fase Diseña del proceso de innovación.",
+          "q": "En la fase \"Diseña\" del proceso, ¿quién conceptualiza la idea junto al Creador?",
+          "a": [
+            "El Comité Innoday",
+            "El CIO",
+            "El Líder de Innovación",
+            "El Embajador de Innovación"
+          ],
+          "c": 3,
+          "ok": "Correcto: el Embajador de Innovación conceptualiza la idea junto al Creador.",
+          "bad": "En Diseña, quien acompaña al Creador es el Embajador de Innovación.",
+          "tip": "El embajador traduce la idea del creador a un concepto workable."
+        },
+        {
+          "caso": "El embudo de evaluación filtra ideas según puntaje.",
+          "q": "¿Cuántos puntos necesita una idea para avanzar en el embudo de evaluación?",
+          "a": [
+            "Más de 10 sobre 25",
+            "Más de 15 sobre 25",
+            "Más de 20 sobre 25",
+            "Los 25 sobre 25"
           ],
           "c": 1,
-          "ok": "Incluirlas temprano evita rediseños caros y frena menos.",
-          "bad": "Llegar al final convierte el control en bloqueo.",
-          "tip": "Agenda un 'checkpoint de riesgos' en la primera semana."
+          "ok": "Correcto: necesita más de 15 sobre 25 para avanzar.",
+          "bad": "El umbral de avance es más de 15 puntos sobre 25, no la nota perfecta.",
+          "tip": "Memoriza el corte: >15/25."
         },
         {
-          "caso": "Hay 3 comités de innovación que se solapan y contradicen.",
-          "q": "¿Qué acción mejora el gobierno?",
+          "caso": "Se refuerza la cultura de Mentes Brillantes en el equipo.",
+          "q": "¿Cuál es el lema de la cultura de Mentes Brillantes?",
           "a": [
-            "Crear un cuarto comité",
-            "Clarificar mandatos y eliminar solapes",
-            "Eliminar toda gobernanza",
-            "Dejar que cada área decida sola siempre"
+            "\"El futuro nos espera\"",
+            "\"Lo que no está roto, rómpelo\"",
+            "\"Innovar es cuestión de suerte\"",
+            "\"Primero perfeccionar, después proponer\""
           ],
           "c": 1,
-          "ok": "Menos instancias, más claridad de mandato.",
-          "bad": "Más comités sin claridad aumentan el ruido.",
-          "tip": "Un mapa simple: quién propone, quién prioriza, quién aprueba."
+          "ok": "Correcto: el lema es \"Lo que no está roto, rómpelo\".",
+          "bad": "El lema cultural de Mentes Brillantes es \"Lo que no está roto, rómpelo\".",
+          "tip": "Innovar también es cuestionar lo que 'ya funciona'."
         },
         {
-          "caso": "Una iniciativa se aprueba, pero no hay seguimiento de hitos ni criterios de salida.",
-          "q": "¿Qué falta en el gobierno?",
+          "caso": "El equipo muestra los retos nacidos del sistema en Everest.",
+          "q": "¿Qué reto de Everest nació de este sistema y hoy está en prototipo?",
           "a": [
-            "Criterios de avance y de stop",
-            "Más presentaciones visuales",
-            "Más personas en el chat",
-            "Un eslogan"
+            "AICURA",
+            "OMMEDICALL",
+            "Innovaitors",
+            "Continuum"
           ],
-          "c": 0,
-          "ok": "Gobernar también es saber cuándo continuar, pivotar o parar.",
-          "bad": "Aprobar sin seguimiento no es gobernar.",
-          "tip": "Define 2–3 KPIs y una fecha de revisión."
+          "c": 3,
+          "ok": "Correcto: Continuum nació de este sistema y hoy está en prototipo.",
+          "bad": "El reto de Everest en prototipo es Continuum (AICURA es de Viva 1A).",
+          "tip": "Asocia cada organización con su reto: Everest → Continuum."
         }
       ],
       "bg": {
@@ -213,428 +247,6 @@
       },
       "monsterAnim": "monstruo",
       "charAvatar": "image/v3/bg/w2-gobierno-char.png"
-    },
-    {
-      "name": "Proceso de Innovación",
-      "topic": "PROCESO",
-      "c": "#22c55e",
-      "cd": "#14532d",
-      "cl": "#dcfce7",
-      "monster": "Caos de Ideas",
-      "icon": "image/v2/world-proceso.png",
-      "hero": {
-        "name": "Luna la Innovadora",
-        "img": "image/cirujano.png",
-        "anim": "cirujano"
-      },
-      "briefing": {
-        "goal": "Aprenderás a pasar de idea a piloto con un proceso claro: entender, idear, probar y aprender.",
-        "threat": "El Caos de Ideas aparece cuando hay lluvia de ideas sin validación ni foco.",
-        "context": "En operación de EPS, un piloto bien diseñado reduce riesgo clínico y operativo."
-      },
-      "learnings": [
-        "Primero se entiende el problema con evidencia, luego se idean soluciones.",
-        "Un piloto pequeño enseña más que un lanzamiento prematuro.",
-        "Medir y aprender cierra el ciclo de innovación."
-      ],
-      "missions": [
-        {
-          "caso": "El equipo salta directo a diseñar una app sin hablar con afiliados ni personal de ventanilla.",
-          "q": "¿Qué paso falta?",
-          "a": [
-            "Validar el problema con usuarios reales",
-            "Comprar más servidores",
-            "Hacer un video promocional",
-            "Contratar más proveedores"
-          ],
-          "c": 0,
-          "ok": "Sin entender el problema, se inventa una solución inútil.",
-          "bad": "Diseñar primero y preguntar después suele fallar.",
-          "tip": "Haz 5 entrevistas cortas antes de construir."
-        },
-        {
-          "caso": "Hay 40 ideas en un mural y ninguna priorizada.",
-          "q": "¿Qué hacer después de idear?",
-          "a": [
-            "Ejecutar todas a la vez",
-            "Priorizar por impacto y factibilidad",
-            "Archivar todo",
-            "Elegir la idea más cara"
-          ],
-          "c": 1,
-          "ok": "Priorizar convierte ideas en un plan accionable.",
-          "bad": "Hacer todo es no hacer nada con calidad.",
-          "tip": "Usa una matriz impacto/esfuerzo en 15 minutos."
-        },
-        {
-          "caso": "Quieren lanzar un nuevo flujo a todos los puntos de atención el mismo día.",
-          "q": "¿Cuál es mejor siguiente paso?",
-          "a": [
-            "Despliegue total inmediato",
-            "Piloto controlado en un sitio",
-            "Solo una campaña en redes",
-            "Esperar un año sin probar"
-          ],
-          "c": 1,
-          "ok": "El piloto reduce riesgo y genera aprendizaje real.",
-          "bad": "Un big bang sin prueba puede romper la operación.",
-          "tip": "Define alcance, duración y métricas del piloto."
-        },
-        {
-          "caso": "El piloto terminó, pero nadie documentó qué funcionó ni qué no.",
-          "q": "¿Qué cierra bien el ciclo?",
-          "a": [
-            "Celebrar y olvidar",
-            "Capturar aprendizajes y decidir siguiente paso",
-            "Borrar los datos",
-            "Cambiar de tema"
-          ],
-          "c": 1,
-          "ok": "Innovar es aprender sistemáticamente, no solo lanzar.",
-          "bad": "Sin aprendizaje, se repiten los mismos errores.",
-          "tip": "Una página: hipótesis, resultado, decisión."
-        },
-        {
-          "caso": "Una mejora de proceso se implementa, pero nadie la monitorea a 30 días.",
-          "q": "¿Qué falta en el proceso?",
-          "a": [
-            "Medición post-implementación",
-            "Más colores en la presentación",
-            "Más reuniones de kickoff",
-            "Un nuevo nombre de proyecto"
-          ],
-          "c": 0,
-          "ok": "Sin medición, no sabes si el valor se sostuvo.",
-          "bad": "Implementar no es lo mismo que lograr el resultado.",
-          "tip": "Agenda revisión a 30 y 90 días con un dueño."
-        }
-      ],
-      "bg": {
-        "battle": "image/v3/bg/w3-proceso-battle-clean.png",
-        "victory": "image/v3/bg/w3-proceso-victory-clean.png",
-        "defeat": "image/v3/bg/w3-proceso-defeat-clean.png",
-        "transition": "image/v3/bg/w3-proceso-transition-clean.png"
-      },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w3-proceso-char.png"
-    },
-    {
-      "name": "Cultura de Innovación",
-      "topic": "CULTURA",
-      "c": "#3b82f6",
-      "cd": "#1e3a8a",
-      "cl": "#dbeafe",
-      "monster": "Espectro del Conformismo",
-      "icon": "image/v2/world-cultura.png",
-      "hero": {
-        "name": "Sanadora Fëa",
-        "img": "image/terapeuta.png",
-        "anim": "terapeuta"
-      },
-      "briefing": {
-        "goal": "Aprenderás a fomentar experimentación segura, feedback y reconocimiento en el día a día.",
-        "threat": "El Espectro del Conformismo gana cuando el error se castiga y nadie propone.",
-        "context": "La cultura se ve en cómo reacciona un líder cuando un piloto no da el resultado esperado."
-      },
-      "learnings": [
-        "La cultura se construye con comportamientos visibles, no con afiches.",
-        "El error de aprendizaje se diferencia del error de negligencia.",
-        "Reconocer aportes pequeños sostiene la innovación."
-      ],
-      "missions": [
-        {
-          "caso": "Un colaborador propone una mejora y recibe burla en la reunión.",
-          "q": "¿Qué efecto tiene en la cultura?",
-          "a": [
-            "Fomenta más ideas",
-            "Reduce la participación futura",
-            "Acelera la innovación",
-            "Mejora la calidad del debate"
-          ],
-          "c": 1,
-          "ok": "El ridículo enseña a callar. La cultura se rompe en público.",
-          "bad": "Ese tipo de reacción no 'filtra' ideas: las apaga.",
-          "tip": "Agradece la propuesta antes de criticarla."
-        },
-        {
-          "caso": "Un piloto no cumple la métrica. El líder pregunta qué aprendieron y qué ajustar.",
-          "q": "¿Qué práctica cultural refleja?",
-          "a": [
-            "Castigo por fallar",
-            "Aprendizaje seguro",
-            "Conformismo",
-            "Ignorar resultados"
-          ],
-          "c": 1,
-          "ok": "Separar 'falló la hipótesis' de 'falló la persona'.",
-          "bad": "Castigar el intento mata la experimentación.",
-          "tip": "Usa la frase: ¿qué aprendimos y qué probamos ahora?"
-        },
-        {
-          "caso": "Solo gerencia puede proponer ideas; el personal de primera línea no tiene canal.",
-          "q": "¿Qué conviene hacer?",
-          "a": [
-            "Mantener ideas solo en gerencia",
-            "Abrir un canal simple para ideas de campo",
-            "Prohibir propuestas",
-            "Pedir ideas solo una vez al año"
-          ],
-          "c": 1,
-          "ok": "Quien atiende al afiliado ve fricciones reales.",
-          "bad": "Cerrar el canal pierde conocimiento operativo.",
-          "tip": "Un buzón digital + respuesta en 10 días crea confianza."
-        },
-        {
-          "caso": "Un equipo logró una mejora pequeña de tiempo de atención. Nadie lo menciona.",
-          "q": "¿Qué acción cultural ayuda más?",
-          "a": [
-            "Ignorarlo porque es pequeño",
-            "Reconocer públicamente el aporte",
-            "Pedir que lo oculten",
-            "Solo premiar proyectos millonarios"
-          ],
-          "c": 1,
-          "ok": "El reconocimiento refuerza el comportamiento deseado.",
-          "bad": "Si solo se celebra lo enorme, nadie intenta lo útil.",
-          "tip": "Dedica 2 minutos de reunión a 'victorias de la semana'."
-        },
-        {
-          "caso": "Hay miedo a probar porque 'si falla, afecta la evaluación'.",
-          "q": "¿Qué mensaje debe dar liderazgo?",
-          "a": [
-            "Prohibir cualquier riesgo",
-            "Permitir experimentos acotados con aprendizaje",
-            "Evaluar solo por cantidad de ideas",
-            "Evitar hablar del tema"
-          ],
-          "c": 1,
-          "ok": "Innovar requiere espacio seguro con límites claros.",
-          "bad": "Prohibir riesgo no elimina problemas: los esconde.",
-          "tip": "Define qué riesgos sí se pueden tomar en un piloto."
-        }
-      ],
-      "bg": {
-        "battle": "image/v3/bg/w4-cultura-battle-clean.png",
-        "victory": "image/v3/bg/w4-cultura-victory-clean.png",
-        "defeat": "image/v3/bg/w4-cultura-defeat-clean.png",
-        "transition": "image/v3/bg/w4-cultura-transition-clean.png"
-      },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w4-cultura-char.png"
-    },
-    {
-      "name": "Gestión del Conocimiento y PI",
-      "topic": "CONOCIMIENTO",
-      "c": "#eab308",
-      "cd": "#713f12",
-      "cl": "#fef9c3",
-      "monster": "Devorador del Olvido",
-      "icon": "image/v2/world-conocimiento.png",
-      "hero": {
-        "name": "Elara",
-        "img": "image/recepcionista.png",
-        "anim": "recepcionista"
-      },
-      "briefing": {
-        "goal": "Aprenderás a capturar, compartir y proteger conocimiento e innovaciones de valor.",
-        "threat": "El Devorador del Olvido gana cuando el saber se va con la persona o no se documenta.",
-        "context": "En una EPS, perder un know-how operativo o un desarrollo propio tiene costo real."
-      },
-      "learnings": [
-        "El conocimiento debe quedar en el sistema, no solo en la cabeza de alguien.",
-        "Compartir aprendizajes evita reinventar la rueda.",
-        "La propiedad intelectual se protege cuando hay valor diferenciador."
-      ],
-      "missions": [
-        {
-          "caso": "La persona clave de autorizaciones se va y nadie sabe cómo se resolvían casos difíciles.",
-          "q": "¿Qué falló?",
-          "a": [
-            "Gestión del conocimiento",
-            "El color del uniforme",
-            "La velocidad del WiFi",
-            "El nombre del comité"
-          ],
-          "c": 0,
-          "ok": "El saber crítico no estaba documentado ni transferido.",
-          "bad": "No es un tema de 'suerte': es un riesgo prevenible.",
-          "tip": "Documenta flujos críticos y haz shadowing antes de una salida."
-        },
-        {
-          "caso": "Dos sedes resolvieron el mismo problema con soluciones distintas y no se enteraron.",
-          "q": "¿Qué práctica ayuda?",
-          "a": [
-            "Compartir aprendizajes entre sedes",
-            "Prohibir soluciones locales",
-            "Ignorar lo que hacen otras sedes",
-            "Empezar de cero siempre"
-          ],
-          "c": 0,
-          "ok": "El conocimiento se multiplica cuando circula.",
-          "bad": "Silenciar aprendizajes localmente encarece la operación.",
-          "tip": "Una 'hora de aprendizaje' mensual entre sedes basta para empezar."
-        },
-        {
-          "caso": "Un equipo crea un algoritmo interno útil y lo publica completo en redes sin revisión.",
-          "q": "¿Qué riesgo hay?",
-          "a": [
-            "Ninguno",
-            "Filtrar valor o PI sin protección",
-            "Mejorar la marca siempre",
-            "Acelerar competencia sana sin costo"
-          ],
-          "c": 1,
-          "ok": "Hay que evaluar qué se comparte y qué se protege.",
-          "bad": "No todo lo útil debe hacerse público de inmediato.",
-          "tip": "Consulta a legal/PI antes de publicar desarrollos propios."
-        },
-        {
-          "caso": "Los aprendizajes de pilotos quedan en presentaciones sueltas en correos.",
-          "q": "¿Dónde deberían vivir?",
-          "a": [
-            "En un repositorio accesible y vivo",
-            "Solo en el chat del equipo",
-            "Solo en la memoria del líder",
-            "En un USB personal"
-          ],
-          "c": 0,
-          "ok": "Un lugar común y buscable evita el olvido institucional.",
-          "bad": "El correo no es un sistema de conocimiento.",
-          "tip": "Una plantilla corta + carpeta por mundo/tema."
-        },
-        {
-          "caso": "Una mejora de proceso se copia de un proveedor sin revisar derechos ni contrato.",
-          "q": "¿Qué conviene hacer?",
-          "a": [
-            "Usarla igual sin preguntar",
-            "Revisar derechos, contratos y autoría",
-            "Asumir que todo es libre",
-            "Ocultar el origen"
-          ],
-          "c": 1,
-          "ok": "Innovar también implica respetar propiedad intelectual ajena.",
-          "bad": "Ignorar derechos genera riesgo legal y reputacional.",
-          "tip": "Guarda evidencias de origen y licencias."
-        }
-      ],
-      "bg": {
-        "battle": "image/v3/bg/w5-conocimiento-battle-clean.png",
-        "victory": "image/v3/bg/w5-conocimiento-victory-clean.png",
-        "defeat": "image/v3/bg/w5-conocimiento-defeat-clean.png",
-        "transition": "image/v3/bg/w5-conocimiento-transition-clean.png"
-      },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w5-conocimiento-char.png"
-    },
-    {
-      "name": "Ecosistema de Innovación",
-      "topic": "ECOSISTEMA",
-      "c": "#ec4899",
-      "cd": "#831843",
-      "cl": "#fce7f3",
-      "monster": "Titán del Estancamiento",
-      "icon": "image/v2/world-ecosistema.png",
-      "hero": {
-        "name": "Dra. Nova",
-        "img": "image/bacteriologa.png",
-        "anim": "bacteriologa"
-      },
-      "briefing": {
-        "goal": "Aprenderás a innovar con aliados: proveedores, startups, academia y redes internas.",
-        "threat": "El Titán del Estancamiento aparece cuando la organización se cierra e intenta resolverlo todo sola.",
-        "context": "Una EPS innova más rápido cuando conecta capacidades internas con partners externos."
-      },
-      "learnings": [
-        "El ecosistema multiplica capacidad: no todo se construye adentro.",
-        "Un buen partner se elige por valor y ajuste, no solo por precio.",
-        "La innovación abierta requiere reglas claras de datos y resultados."
-      ],
-      "missions": [
-        {
-          "caso": "Quieren digitalizar un proceso y el equipo interno no tiene capacidad en 12 meses.",
-          "q": "¿Qué opción de ecosistema es razonable?",
-          "a": [
-            "Esperar sin buscar aliados",
-            "Evaluar partner o startup con piloto acotado",
-            "Comprar sin criterios",
-            "Copiar un PDF de otra EPS"
-          ],
-          "c": 1,
-          "ok": "Un aliado acelera si hay piloto, métricas y salida clara.",
-          "bad": "Aislarse retrasa el valor al afiliado.",
-          "tip": "Define qué se compra, qué se co-crea y qué se retiene."
-        },
-        {
-          "caso": "Un proveedor ofrece 'solución mágica' sin acceso a datos ni resultados medibles.",
-          "q": "¿Qué exigir?",
-          "a": [
-            "Confianza ciega",
-            "Métricas, alcance y prueba de valor",
-            "Solo el precio más bajo",
-            "Un logo más grande"
-          ],
-          "c": 1,
-          "ok": "Sin prueba de valor, no hay alianza: hay riesgo.",
-          "bad": "El precio bajo no sustituye evidencia.",
-          "tip": "Pide caso de uso, KPIs y plan de piloto."
-        },
-        {
-          "caso": "Academia propone investigar un problema de adherencia con datos de afiliados.",
-          "q": "¿Qué debe cuidarse primero?",
-          "a": [
-            "Solo la fecha del evento",
-            "Privacidad, ética y reglas de uso de datos",
-            "El color de las diapositivas",
-            "Evitar cualquier alianza"
-          ],
-          "c": 1,
-          "ok": "La colaboración externa exige gobierno de datos.",
-          "bad": "Innovar no justifica saltarse privacidad.",
-          "tip": "Acuerda propósito, anonimización y dueño del resultado."
-        },
-        {
-          "caso": "Cada área negocia partners por separado y se duplican contratos.",
-          "q": "¿Qué mejora el ecosistema interno?",
-          "a": [
-            "Visibilidad y coordinación de alianzas",
-            "Prohibir partners",
-            "Más contratos sin revisión",
-            "Ignorar solapes"
-          ],
-          "c": 0,
-          "ok": "Un mapa de partners evita costos y conflictos.",
-          "bad": "Fragmentar alianzas debilita el poder de negociación.",
-          "tip": "Mantén un inventario simple de partners activos."
-        },
-        {
-          "caso": "Una alianza terminó y nadie capturó qué capacidades quedaron en la EPS.",
-          "q": "¿Qué práctica cierra bien una colaboración?",
-          "a": [
-            "Olvidar y seguir",
-            "Transferir aprendizajes y capacidades internas",
-            "Borrar toda evidencia",
-            "Culpar al partner"
-          ],
-          "c": 1,
-          "ok": "El ecosistema debe dejar músculo interno, no solo dependencia.",
-          "bad": "Sin transferencia, cada alianza reinicia el aprendizaje en cero.",
-          "tip": "Incluye 'transferencia' como entregable del contrato."
-        }
-      ],
-      "bg": {
-        "battle": "image/v3/bg/w6-ecosistema-battle-clean.png",
-        "victory": "image/v3/bg/w6-ecosistema-victory-clean.png",
-        "defeat": "image/v3/bg/w6-ecosistema-defeat-clean.png",
-        "transition": "image/v3/bg/w6-ecosistema-transition-clean.png"
-      },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w6-ecosistema-char.png"
     }
-  ],
-  "ui": {
-    "startBg": "image/v3/bg/start-clean.png",
-    "finalBg": "image/v3/bg/final-clean.png",
-    "logo": "image/v3/bg/logo.png",
-    "timerSec": 10
-  }
+  ]
 }

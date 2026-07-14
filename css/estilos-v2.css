@@ -10,8 +10,15 @@
 html,body{height:100%}
 body{background:#010208;font-family:var(--font-body);color:var(--ink);overflow:hidden;
   -webkit-user-select:none;user-select:none}
-#viewport{position:fixed;inset:0;overflow:hidden;background:#010208}
+#viewport{position:fixed;inset:0;overflow:hidden;background:#010208;-webkit-overflow-scrolling:touch}
+#viewport.mobile-scroll{overflow:auto;overscroll-behavior:contain}
 #stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center}
+.rotate-hint{display:none;position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:100;
+  background:rgba(0,8,24,.88);border:1px solid rgba(248,200,72,.45);color:#ffe9ad;padding:8px 14px;
+  border-radius:999px;font-size:13px;pointer-events:none;white-space:nowrap}
+@media (max-width:700px) and (orientation:portrait){
+  .rotate-hint{display:block}
+}
 #shaker{position:absolute;inset:0;--wc:#8b5cf6}
 #shaker.shake{animation:stageShake .4s linear}
 @keyframes stageShake{

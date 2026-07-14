@@ -278,7 +278,12 @@ function renderBrief(i) {
 function startBattle(i) {
   S.current = i;
   const w = WORLDS[i];
-  B = { q: 0, heroHP: 90, monHP: 90, lock: true, ok: 0, results: [], correctPos: 0 };
+  const maxHP = 90;
+  B = {
+    q: 0, heroHP: maxHP, monHP: maxHP, maxHP,
+    dmg: Math.max(1, Math.round(maxHP / w.missions.length)),
+    lock: true, ok: 0, results: [], correctPos: 0
+  };
   const scr = $('#s-battle');
   scr.style.backgroundImage = `url('${w.bg.battle}')`;
   scr.innerHTML = `
@@ -305,8 +310,9 @@ function startBattle(i) {
 }
 
 function setHP() {
-  $('#hpHeroF').style.width = (Math.max(0, B.heroHP) / 90 * 100) + '%';
-  $('#hpMonF').style.width = (Math.max(0, B.monHP) / 90 * 100) + '%';
+  const max = B.maxHP || 90;
+  $('#hpHeroF').style.width = (Math.max(0, B.heroHP) / max * 100) + '%';
+  $('#hpMonF').style.width = (Math.max(0, B.monHP) / max * 100) + '%';
 }
 
 function clearTimer() { if (tmr) { clearInterval(tmr); tmr = null; } }
@@ -345,7 +351,7 @@ function renderQ() {
         <div class="cname">${w.hero.name}</div>
         <div class="tnum" id="tnum">${DATA.ui.timerSec || 10}</div>
       </div>
-      <div style="flex:1;text-align:right;font-size:11px;color:#555">seg restantes · caso ${B.q + 1}/5</div>
+      <div style="flex:1;text-align:right;font-size:11px;color:#555">seg restantes · caso ${B.q + 1}/${w.missions.length}</div>
     </div>
     <div class="tbar-w"><div class="tbar" id="tbar" style="width:100%"></div></div>
     <div class="caso">${m.caso}</div>
@@ -392,7 +398,7 @@ async function playStrike(ok) {
     await sleep(650);
     await setAction(hero, w.hero.anim, 'attack', { nextIdle: false });
     const hitP = setAction(mon, 'monstruo', 'hit', { nextIdle: false });
-    B.monHP -= 30; setHP();
+    B.monHP = Math.max(0, B.monHP - (B.dmg || 30)); setHP();
     await hitP;
     await sleep(280);
     setAction(hero, w.hero.anim, 'idle');
@@ -402,7 +408,7 @@ async function playStrike(ok) {
     await sleep(650);
     await setAction(mon, 'monstruo', 'attack', { nextIdle: false });
     const hitP = setAction(hero, w.hero.anim, 'hit', { nextIdle: false });
-    B.heroHP -= 30; setHP();
+    B.heroHP = Math.max(0, B.heroHP - (B.dmg || 30)); setHP();
     await hitP;
     await sleep(280);
     setAction(hero, w.hero.anim, 'idle');
@@ -431,6 +437,10 @@ async function afterFeedback() {
   if (B.monHP <= 0) return renderVictory();
   if (B.heroHP <= 0) return renderDefeat();
   B.q++;
+  const total = WORLDS[S.current].missions.length;
+  if (B.q >= total) {
+    return (B.monHP <= B.heroHP) ? renderVictory() : renderDefeat();
+  }
   go('s-battle');
   renderQ();
 }
@@ -438,7 +448,7 @@ async function afterFeedback() {
 function renderVictory() {
   const i = S.current, w = WORLDS[i];
   S.conquered[i] = true;
-  const xp = 10000 + (B.heroHP / 30) * 2500;
+  const xp = 10000 + (B.heroHP / (B.dmg || 30)) * 2500;
   S.totalXP += xp; save();
   const last = S.conquered.every(Boolean);
   const scr = $('#s-victory');

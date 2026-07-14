@@ -476,10 +476,51 @@ function showLoadError(err){
   show('start');
 }
 
-/* ---------- escala para pantalla grande ---------- */
-function fit(){ const s=Math.min(innerWidth/1600, innerHeight/900);
-  $('#stage').style.transform=`translate(-50%,-50%) scale(${s})`; }
+/* ---------- escala responsive (desktop letterbox / mobile pan+scroll) ---------- */
+function fit(){
+  const stage=$('#stage'), vp=$('#viewport');
+  if(!stage||!vp) return;
+  const vw=innerWidth, vh=innerHeight;
+  const mobile=vw<900;
+  if(mobile){
+    // Escala para que el ancho quepa; permite scroll vertical si hace falta
+    const s=Math.min(vw/1600, vh/900, 1);
+    // En portrait prioriza ancho legible y permite desplazar
+    const useScroll=vh>vw || s<0.42;
+    if(useScroll){
+      const sc=Math.min(Math.max(vw/1600, 0.38), vw/1600*1.02);
+      stage.style.left='0';
+      stage.style.top='0';
+      stage.style.transformOrigin='top left';
+      stage.style.transform=`scale(${sc})`;
+      stage.style.marginRight=`${1600*(sc-1)}px`;
+      stage.style.marginBottom=`${900*(sc-1)}px`;
+      vp.style.overflow='auto';
+      vp.classList.add('mobile-scroll');
+    }else{
+      stage.style.left='50%';
+      stage.style.top='50%';
+      stage.style.transformOrigin='center';
+      stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+      stage.style.marginRight='';
+      stage.style.marginBottom='';
+      vp.style.overflow='hidden';
+      vp.classList.remove('mobile-scroll');
+    }
+  }else{
+    const s=Math.min(vw/1600, vh/900);
+    stage.style.left='50%';
+    stage.style.top='50%';
+    stage.style.transformOrigin='center';
+    stage.style.transform=`translate(-50%,-50%) scale(${s})`;
+    stage.style.marginRight='';
+    stage.style.marginBottom='';
+    vp.style.overflow='hidden';
+    vp.classList.remove('mobile-scroll');
+  }
+}
 addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,120));
 
 /* ---------- estrellas + partículas ---------- */
 const bg=$('#bgc').getContext('2d'), fx=$('#fxc').getContext('2d');
