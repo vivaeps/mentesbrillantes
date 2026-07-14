@@ -74,11 +74,310 @@ function lockSVG(){
 }
 
 const MONSTER_IMG='image/monstruo.png';
+const ANIM_FRAME_COUNTS={idle:8,move:8,attack:8,hit:6};
+const ANIM_PLAYERS=new WeakMap();
+
+function animSlug(src){
+  return (src||'').split('/').pop().replace(/\.[^.]+$/,'');
+}
+
+function animFrame(slug,action='idle',i=0){
+  return `image/anim/${slug}/${action}/frame-${String(i).padStart(2,'0')}.png`;
+}
+
 function heroImg(h,cls=''){
-  return `<img class="hero-img ${cls}" src="${h.img}" alt="">`;
+  const slug=animSlug(h.img);
+  return `<img class="hero-img anim-frame ${cls}" data-anim-slug="${slug}" data-anim-action="idle" src="${animFrame(slug)}" alt="">`;
 }
 function monsterImg(cls=''){
-  return `<img class="monster-img ${cls}" src="${MONSTER_IMG}" alt="">`;
+  const slug=animSlug(MONSTER_IMG);
+  return `<img class="monster-img anim-frame ${cls}" data-anim-slug="${slug}" data-anim-action="idle" src="${animFrame(slug)}" alt="">`;
+}
+function charBody(kind,inner,cls=''){
+  return `<div class="char-body ${kind} ${cls}">${inner}</div>`;
+}
+function heroBody(h,cls=''){ return charBody('idle-hero', heroImg(h), cls); }
+function monsterBody(cls=''){ return charBody('idle-mon', monsterImg(), cls); }
+
+function setFrameAction(body,action='idle',o={}){
+  const img=body?.querySelector('.anim-frame');
+  if(!img) return Promise.resolve();
+  const slug=img.dataset.animSlug;
+  const count=ANIM_FRAME_COUNTS[action]||ANIM_FRAME_COUNTS.idle;
+  const loop=o.loop ?? !o.once;
+  const duration=o.duration || (loop ? count*115 : count*70);
+  const player=ANIM_PLAYERS.get(img)||{token:0};
+  const token=++player.token;
+  ANIM_PLAYERS.set(img,player);
+  img.dataset.animAction=action;
+  return new Promise(resolve=>{
+    const start=performance.now();
+    function tick(now){
+      if(player.token!==token) return resolve();
+      const elapsed=now-start;
+      let idx;
+      if(loop) idx=Math.floor(elapsed/(duration/count))%count;
+      else idx=Math.min(count-1,Math.floor(elapsed/duration*count));
+      img.src=animFrame(slug,action,idx);
+      if(loop || elapsed<duration) requestAnimationFrame(tick);
+      else{
+        if(o.nextIdle!==false) setFrameAction(body,'idle');
+        resolve();
+      }
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+function startFrameLoops(root=document){
+  root.querySelectorAll('.char-body').forEach(b=>setFrameAction(b,'idle'));
+}
+
+/* ================================================================
+   MOVIMIENTO DE PERSONAJES
+   ================================================================ */
+const MAP_CENTER={x:800,y:470};
+const BATTLE_HERO_BASE={x:210,y:560};
+const BATTLE_MON_BASE={x:1390,y:540};
+const REDUCED_MOTION=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let mapMoveToken=0, battleMoveToken=0, mapMonPatrol=null, battlePatrolTimer=null, battlePatrolStop=null;
+
+function easeInOut(t){ return t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2; }
+function easeOutCubic(t){ return 1-Math.pow(1-t,3); }
+
+function charCenter(el){
+  const r=el.getBoundingClientRect(), sr=$('#stage').getBoundingClientRect();
+  const scale=sr.width/1600||1;
+  return {x:(r.left+r.width/2-sr.left)/scale, y:(r.top+r.height*.42-sr.top)/scale};
+}
+
+function setWalkerPos(el,x,y){
+  el.style.left=x+'px'; el.style.top=y+'px';
+}
+
+function setWalkerDynamics(el,{lift=0,tilt=0,scale=1,shadowScale=1,shadowAlpha=.34}={}){
+  el.style.setProperty('--char-lift', lift.toFixed(2)+'px');
+  el.style.setProperty('--char-tilt', tilt.toFixed(2)+'deg');
+  el.style.setProperty('--char-scale', scale.toFixed(3));
+  el.style.setProperty('--shadow-scale', shadowScale.toFixed(3));
+  el.style.setProperty('--shadow-alpha', shadowAlpha.toFixed(3));
+}
+
+function setWalkState(body,on,flip,action='move'){
+  if(!body) return;
+  body.classList.toggle('traveling',on);
+  body.classList.toggle('flip',!!flip);
+  setFrameAction(body,on?action:'idle');
+}
+
+function setFacing(body,flip){
+  if(body) body.classList.toggle('flip',!!flip);
+}
+
+function showImpactRing(x,y,color){
+  if(REDUCED_MOTION) return;
+  const r=document.createElement('div');
+  r.className='impact-ring';
+  r.style.left=x+'px'; r.style.top=y+'px'; r.style.color=color;
+  $('#shaker').appendChild(r);
+  setTimeout(()=>r.remove(),700);
+}
+
+function showActionWord(txt,x,y,color){
+  if(REDUCED_MOTION) return;
+  const w=document.createElement('div');
+  w.className='action-word';
+  w.style.left=x+'px'; w.style.top=y+'px'; w.style.color=color;
+  w.textContent=txt;
+  $('#shaker').appendChild(w);
+  setTimeout(()=>w.remove(),850);
+}
+
+function pulseImpact(){
+  if(REDUCED_MOTION) return;
+  const s=$('#shaker');
+  s.classList.remove('impact'); void s.offsetWidth;
+  s.classList.add('impact');
+  setTimeout(()=>s.classList.remove('impact'),360);
+}
+
+function cancelMapMoves(){ mapMoveToken++; stopMapMonPatrol(); }
+function cancelBattleMoves(){ battleMoveToken++; }
+function stopMapMonPatrol(){ if(mapMonPatrol){ clearTimeout(mapMonPatrol); mapMonPatrol=null; } }
+function stopBattlePatrol(){ cancelBattleMoves(); if(battlePatrolTimer){ clearTimeout(battlePatrolTimer); battlePatrolTimer=null; }
+  if(battlePatrolStop){ battlePatrolStop(); battlePatrolStop=null; } }
+
+async function moveWalker(el,x1,y1,x2,y2,ms,token,opt={}){
+  const body=el.querySelector('.char-body');
+  if(REDUCED_MOTION || ms<=0){
+    setWalkerPos(el,x2,y2); setWalkState(body,false); setWalkerDynamics(el); return;
+  }
+  const distance=Math.hypot(x2-x1,y2-y1);
+  const arc=opt.arc ?? Math.min(34, Math.max(8, distance*.035));
+  const maxTilt=opt.tilt ?? Math.min(4.2, Math.max(1.2, distance*.006));
+  const travelScale=opt.scale ?? 1;
+  const tokenKind=opt.tokenKind||'map';
+  if(opt.preserveAction){
+    body.classList.add('traveling');
+    setFacing(body,x2<x1);
+  }else setWalkState(body,true,x2<x1,opt.action||'move');
+  const t0=performance.now();
+  return new Promise(resolve=>{
+    function frame(now){
+      const cancelled=token!=null && (tokenKind==='battle' ? token!==battleMoveToken : token!==mapMoveToken);
+      if(cancelled){
+        body.classList.remove('traveling');
+        if(!opt.preserveAction) setWalkState(body,false);
+        setWalkerDynamics(el);
+        return resolve();
+      }
+      const k=Math.min(1,(now-t0)/ms);
+      const e=opt.ease==='out' ? easeOutCubic(k) : easeInOut(k);
+      const lift=-Math.sin(k*Math.PI)*arc;
+      const tilt=(x2>=x1?1:-1)*Math.sin(k*Math.PI)*maxTilt;
+      const shadowEase=Math.sin(k*Math.PI);
+      setWalkerPos(el,x1+(x2-x1)*e,y1+(y2-y1)*e);
+      setWalkerDynamics(el,{
+        lift, tilt, scale: travelScale,
+        shadowScale: 1+shadowEase*.22,
+        shadowAlpha: Math.max(.16,.34-shadowEase*.18)
+      });
+      if(k<1) requestAnimationFrame(frame);
+      else{
+        body.classList.remove('traveling');
+        if(!opt.preserveAction) setWalkState(body,false);
+        setWalkerDynamics(el);
+        resolve();
+      }
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+function mapTargetFor(i){ const [px,py]=MP[i]; return {x:px,y:py+78}; }
+
+async function walkMapHeroTo(x,y,ms){
+  const el=$('#mapHero'); if(!el) return;
+  const x1=+el.dataset.x||MAP_CENTER.x, y1=+el.dataset.y||MAP_CENTER.y;
+  if(Math.hypot(x-x1,y-y1)<10){
+    setWalkerPos(el,x,y); el.dataset.x=x; el.dataset.y=y; return;
+  }
+  const token=++mapMoveToken;
+  const dist=Math.hypot(x-x1,y-y1);
+  await moveWalker(el,x1,y1,x,y,ms||Math.max(650,Math.min(2400,dist*2.2)),token,{arc:16,tilt:2.2});
+  if(token!==mapMoveToken) return;
+  el.dataset.x=x; el.dataset.y=y;
+}
+
+function startMapMonPatrol(i){
+  stopMapMonPatrol();
+  const el=$('#mapMon'); if(!el) return;
+  const [px,py]=MP[i];
+  const base={x:px+92,y:py+62};
+  setWalkerPos(el,base.x,base.y);
+  el.dataset.x=base.x; el.dataset.y=base.y;
+  let dir=-1, busy=false;
+  async function step(){
+    if(S.screen!=='map'||!$('#mapMon')||busy) return;
+    busy=true;
+    const cx=+el.dataset.x, cy=+el.dataset.y;
+    const nx=cx+dir*56, ny=cy+(dir>0?-8:8);
+    await moveWalker(el,cx,cy,nx,ny,760,null,{arc:10,tilt:1.8});
+    if($('#mapMon')){ el.dataset.x=nx; el.dataset.y=ny; dir*=-1; }
+    busy=false;
+    if(S.screen==='map'&&$('#mapMon')) mapMonPatrol=setTimeout(step,900);
+  }
+  mapMonPatrol=setTimeout(step,900);
+}
+
+function startBattlePatrol(){
+  stopBattlePatrol();
+  if(REDUCED_MOTION) return;
+  const step=async()=>{
+    if(!B||B.lock||S.screen!=='battle') return;
+    const hero=$('#heroChar'), mon=$('#monChar');
+    if(!hero||!mon) return;
+    const hx=B.heroBase.x, hy=B.heroBase.y, mx=B.monBase.x, my=B.monBase.y;
+    const token=++battleMoveToken;
+    await moveWalker(hero,hx,hy,hx+16,hy-5,720,token,{arc:6,tilt:1.2,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    await moveWalker(hero,hx+16,hy-5,hx-10,hy,780,token,{arc:5,tilt:1.1,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    await moveWalker(hero,hx-10,hy,hx,hy,620,token,{arc:4,tilt:.8,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    await moveWalker(mon,mx,my,mx-16,my-5,760,token,{arc:7,tilt:1.1,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    await moveWalker(mon,mx-16,my-5,mx+10,my,800,token,{arc:6,tilt:1,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    await moveWalker(mon,mx+10,my,mx,my,640,token,{arc:4,tilt:.8,tokenKind:'battle'});
+    if(!B||B.lock||S.screen!=='battle') return;
+    battlePatrolTimer=setTimeout(step,900);
+  };
+  battlePatrolStop=()=>{};
+  battlePatrolTimer=setTimeout(step,1200);
+}
+
+async function battleEntrance(){
+  const hero=$('#heroChar'), mon=$('#monChar');
+  if(!hero||!mon) return;
+  B.heroBase={...BATTLE_HERO_BASE}; B.monBase={...BATTLE_MON_BASE};
+  if(REDUCED_MOTION){
+    setWalkerPos(hero,B.heroBase.x,B.heroBase.y);
+    setWalkerPos(mon,B.monBase.x,B.monBase.y);
+    return;
+  }
+  setWalkerPos(hero,-120,B.heroBase.y+20);
+  setWalkerPos(mon,1720,B.monBase.y+10);
+  await Promise.all([
+    moveWalker(hero,-120,B.heroBase.y+20,B.heroBase.x,B.heroBase.y,1100,null,{arc:22,tilt:2.6,ease:'out'}),
+    moveWalker(mon,1720,B.monBase.y+10,B.monBase.x,B.monBase.y,1200,null,{arc:20,tilt:2.4,ease:'out'})
+  ]);
+}
+
+async function battleStrike(attacker){
+  const isHero=attacker==='hero';
+  const atkEl=$(isHero?'#heroChar':'#monChar');
+  const defEl=$(isHero?'#monChar':'#heroChar');
+  const atkBody=atkEl.querySelector('.char-body');
+  const defBody=defEl.querySelector('.char-body');
+  const base=isHero?B.heroBase:B.monBase;
+  const meetX=isHero?base.x+240:base.x-240;
+  const w=WORLDS[S.current];
+  stopBattlePatrol();
+  const token=++battleMoveToken;
+  const attackFlip=!isHero;
+  const impactColor=isHero?w.c:'#ff5a3c';
+  setFacing(atkBody,attackFlip);
+  const attackAnim=setFrameAction(atkBody,'attack',{once:true,duration:isHero?760:820});
+  await sleep(150);
+  if(isHero) sfx.swing(); else sfx.bad();
+  atkBody.classList.add('dashing');
+  await moveWalker(atkEl,base.x,base.y,meetX,base.y,isHero?230:250,token,{arc:18,tilt:4.6,scale:1.015,ease:'out',tokenKind:'battle',preserveAction:true});
+  atkBody.classList.remove('dashing');
+  const from=charCenter(atkEl), to=charCenter(defEl);
+  await shootOrb(from,to,w.c,!isHero);
+  sfx.hit();
+  pulseImpact();
+  showImpactRing(to.x,to.y,impactColor);
+  showActionWord(isHero?'¡Acierto!':'¡Cuidado!',to.x,to.y-102,impactColor);
+  setFacing(defBody,!isHero);
+  defBody.classList.add('hitflash');
+  setFrameAction(defBody,'hit',{once:true,duration:520});
+  if(isHero){
+    burstAt(to.x,to.y,w.c,34);
+    popDmg(to.x,to.y-140,'-30','#ffffff');
+    B.monHP-=30; setHP('mon');
+  }else{
+    $('#shaker').classList.add('shake');
+    burstAt(to.x,to.y,'#ff5a3c',30);
+    popDmg(to.x,to.y-150,'-30','#ff8a8a');
+    B.heroHP-=30; setHP('hero');
+  }
+  await sleep(420);
+  defBody.classList.remove('hitflash');
+  await attackAnim;
+  await moveWalker(atkEl,meetX,base.y,base.x,base.y,440,token,{arc:10,tilt:2.4,tokenKind:'battle'});
+  if(!isHero) $('#shaker').classList.remove('shake');
 }
 
 /* ================================================================
@@ -114,8 +413,8 @@ const fmt=n=>n.toLocaleString('es-CO');
 const S={ current:0, unlocked:1, conquered:[], totalXP:0, totalOK:0, totalQ:0,
   screen:'start', flash:null, transT:null, transGo:null };
 let B=null;
-const HERO_POS={x:280,y:462}, MON_POS={x:1330,y:436};
 const MP=[[560,285],[1040,285],[1215,470],[1040,655],[560,655],[385,470]];
+let mapHeroPos={...MAP_CENTER};
 
 function freshConquered(){ return Array(WORLDS.length).fill(false); }
 
@@ -250,16 +549,22 @@ function renderStart(){
    <div class="orbit-scene">${rings}${orbs}<div class="start-logo">${logoSVG(null)}</div></div>
    <button class="btn btn-big btn-cyan" id="btnStart">&#9654;&nbsp; ${hasProgress()?'CONTINUAR AVENTURA':'COMENZAR AVENTURA'}</button>
    ${hasProgress()?'<div class="start-hint" style="color:#9aa6c8">Progreso guardado en este dispositivo</div>':''}
-   <div class="start-hint">5 preguntas por mundo &middot; cada acierto hiere al monstruo, cada error te hiere a ti &middot; 3 golpes deciden la batalla</div>`;
+   <div class="start-hint">5 preguntas por mundo &middot; cada acierto hiere al monstruo, cada error te hiere a ti &middot; 3 golpes deciden la batalla</div>
+   <div style="margin-top:18px;display:flex;gap:18px;justify-content:center;flex-wrap:wrap">
+   <a href="v2.html" style="font-size:16px;color:#8aa0d4;text-decoration:underline">V2 aprendizaje →</a>
+   <a href="v3.html" style="font-size:16px;color:#ffd700;text-decoration:underline">V3 Gamma + frames →</a>
+   </div>`;
   $('#btnStart').onclick=()=>{ sfx.click(); renderMap(); };
   show('start');
 }
 
 /* ---------- mapa de progreso ---------- */
 function renderMap(){
+  cancelMapMoves();
   setWC('#8b5cf6'); setFX('none');
   const cnt=S.conquered.filter(Boolean).length;
   const cur=S.conquered.indexOf(false);
+  const curWorld=WORLDS[cur]||WORLDS[0];
   let lines=`<ellipse class="map-orbit" cx="800" cy="470" rx="250" ry="152"/>
     <ellipse class="map-orbit" cx="800" cy="470" rx="345" ry="212"/>
     <ellipse class="map-orbit" cx="800" cy="470" rx="435" ry="268"/>`;
@@ -275,6 +580,10 @@ function renderMap(){
       ${st==='locked'?`<div class="lock-ico">${lockSVG()}</div>`:''}
       <div class="map-name"><b>MUNDO ${i+1}</b>${w.name}${st==='conquered'?'<br><span class="badge-conq">&#10003; CONQUISTADO</span>':''}</div>
     </div>`; });
+  const fromCenter=S.flash!=null||!hasProgress();
+  if(fromCenter) mapHeroPos={...MAP_CENTER};
+  const startPos={...mapHeroPos};
+  const target=mapTargetFor(cur>=0?cur:0);
   $('#scr-map').innerHTML=`
    <svg class="map-lines" viewBox="0 0 1600 900">${lines}</svg>
    <div class="map-title-wrap">
@@ -284,15 +593,36 @@ function renderMap(){
    </div>
    <div class="map-logo" style="left:800px;top:470px">${logoSVG(S.conquered)}</div>
    ${planets}
+   <div class="map-walker" id="mapHero" data-x="${startPos.x}" data-y="${startPos.y}" style="left:${startPos.x}px;top:${startPos.y}px">
+     ${heroBody(curWorld.hero)}<div class="walker-tag">${curWorld.hero.name}</div></div>
+   <div class="map-walker map-mon" id="mapMon" style="left:${target.x+92}px;top:${target.y-16}px">
+     ${monsterBody()}<div class="walker-tag">${curWorld.monster}</div></div>
    <div class="map-hint">Haz clic en el planeta iluminado para iniciar la batalla</div>`;
   document.querySelectorAll('#scr-map .map-planet.current').forEach(p=>{
-    p.onclick=()=>{ sfx.click(); startBattle(+p.dataset.i); }; });
+    p.onclick=()=>goToBattle(+p.dataset.i); });
   if(S.flash!=null){ sfx.unlock(); S.flash=null; }
   show('map');
+  startFrameLoops($('#scr-map'));
+  walkMapHeroTo(target.x,target.y).then(()=>{
+    if(S.screen==='map') startMapMonPatrol(cur>=0?cur:0);
+  });
+}
+
+async function goToBattle(i){
+  if(S.screen!=='map') return;
+  cancelMapMoves();
+  sfx.click();
+  const target=mapTargetFor(i);
+  await walkMapHeroTo(target.x,target.y,900);
+  if(S.screen!=='map') return;
+  mapHeroPos={...target};
+  startBattle(i);
 }
 
 /* ---------- batalla ---------- */
 function startBattle(i){
+  cancelMapMoves();
+  stopBattlePatrol();
   S.current=i; const w=WORLDS[i];
   B={q:0,heroHP:90,monHP:90,lock:true,ok:0,bad:0,results:[],correctPos:0};
   setWC(w.c); setFX('none');
@@ -304,15 +634,15 @@ function startBattle(i){
        <div class="fname"><span style="color:${w.cl}">${w.hero.name}</span><span class="hp-num" id="hpHeroN">90 / 90</span></div>
        <div class="hpbar hp-hero" id="hpHeroB"><div class="hpfill" id="hpHeroF"></div><div class="tick" style="left:33.3%"></div><div class="tick" style="left:66.6%"></div></div>
      </div>
-     <div class="char-holder" id="heroChar">${heroImg(w.hero)}</div>
    </div>
    <div class="fighter mon-fighter">
      <div class="plate">
        <div class="fname"><span style="color:#ff9d8a">${w.monster}</span><span class="hp-num" id="hpMonN">90 / 90</span></div>
        <div class="hpbar hp-mon" id="hpMonB"><div class="hpfill" id="hpMonF"></div><div class="tick" style="left:33.3%"></div><div class="tick" style="left:66.6%"></div></div>
      </div>
-     <div class="char-holder" id="monChar">${monsterImg()}</div>
    </div>
+   <div class="battle-walker hero-walker" id="heroChar">${heroBody(w.hero)}</div>
+   <div class="battle-walker mon-walker" id="monChar">${monsterBody()}</div>
    <div class="qa-panel" id="qaPanel">
      <div class="q-meta"><span id="qCount"></span><div class="q-dots" id="qDots"></div><span>${w.topic}</span></div>
      <div class="q-text" id="qText"></div>
@@ -322,8 +652,13 @@ function startBattle(i){
      <div class="wi-name gold-text">${w.name}</div>
      <div class="wi-vs">${w.hero.name} <em>VS</em> ${w.monster}</div></div>`;
   show('battle'); sfx.whoosh();
-  setTimeout(()=>{ const wi=document.querySelector('#scr-battle .world-intro');
-    if(wi) wi.remove(); renderQ(); },2350);
+  startFrameLoops($('#scr-battle'));
+  battleEntrance().then(()=>{
+    if(S.screen!=='battle'||!B) return;
+    const wi=document.querySelector('#scr-battle .world-intro');
+    if(wi) wi.remove();
+    renderQ();
+  });
 }
 
 function renderQ(){
@@ -338,6 +673,7 @@ function renderQ(){
   document.querySelectorAll('#answers .ans').forEach(b=>b.onclick=()=>answer(+b.dataset.p));
   const p=$('#qaPanel'); p.classList.remove('show'); void p.offsetWidth; p.classList.add('show');
   B.lock=false;
+  startBattlePatrol();
 }
 
 function setHP(who){
@@ -367,6 +703,7 @@ async function shootOrb(from,to,color,dark){
 
 async function answer(pos){
   if(!B||B.lock) return; B.lock=true;
+  stopBattlePatrol();
   const w=WORLDS[S.current];
   const btns=[...document.querySelectorAll('#answers .ans')];
   btns.forEach(b=>b.disabled=true);
@@ -378,37 +715,19 @@ async function answer(pos){
   if(!ok) btns[B.correctPos].classList.add('reveal');
   ok?sfx.ok():sfx.bad();
   await sleep(950);
-  if(ok){
-    $('#heroChar').classList.add('lunge'); sfx.swing();
-    await sleep(190);
-    await shootOrb(HERO_POS,MON_POS,w.c,false);
-    sfx.hit(); $('#monChar').classList.add('hitflash');
-    burstAt(MON_POS.x,MON_POS.y,w.c,34);
-    popDmg(MON_POS.x,MON_POS.y-140,'-30','#ffffff');
-    B.monHP-=30; setHP('mon');
-    await sleep(560);
-    $('#heroChar').classList.remove('lunge'); $('#monChar').classList.remove('hitflash');
-  } else {
-    $('#monChar').classList.add('lunge-m');
-    await sleep(190);
-    await shootOrb(MON_POS,HERO_POS,w.c,true);
-    sfx.hit(); $('#heroChar').classList.add('hitflash');
-    $('#shaker').classList.add('shake');
-    burstAt(HERO_POS.x,HERO_POS.y,'#ff5a3c',30);
-    popDmg(HERO_POS.x,HERO_POS.y-150,'-30','#ff8a8a');
-    B.heroHP-=30; setHP('hero');
-    await sleep(560);
-    $('#heroChar').classList.remove('hitflash'); $('#monChar').classList.remove('lunge-m');
-    $('#shaker').classList.remove('shake');
-  }
+  if(ok) await battleStrike('hero');
+  else await battleStrike('mon');
   if(B.monHP<=0){
-    $('#monChar').classList.add('dying');
-    burstAt(MON_POS.x,MON_POS.y,w.c,60,9); burstAt(MON_POS.x,MON_POS.y,'#ffffff',30,5);
+    stopBattlePatrol();
+    $('#monChar .char-body').classList.add('dying');
+    const c=charCenter($('#monChar'));
+    burstAt(c.x,c.y,w.c,60,9); burstAt(c.x,c.y,'#ffffff',30,5);
     tone(700,.5,'sawtooth',.14,0,60);
     await sleep(1050); return renderVictory();
   }
   if(B.heroHP<=0){
-    $('#heroChar').classList.add('collapse');
+    stopBattlePatrol();
+    $('#heroChar .char-body').classList.add('collapse');
     await sleep(1050); return renderDefeat();
   }
   B.q++; await sleep(320); renderQ();
@@ -498,8 +817,10 @@ function renderFinal(){
 
 function resetAll(){
   clearProgress();
+  cancelMapMoves(); stopBattlePatrol();
   S.current=0; S.unlocked=1; S.conquered=freshConquered();
   S.totalXP=0; S.totalOK=0; S.totalQ=0; S.flash=null; B=null;
+  mapHeroPos={...MAP_CENTER};
   clearTimeout(S.transT); S.transGo=null; setFX('none'); renderStart();
 }
 
@@ -516,7 +837,7 @@ function bindHUD(){
 
 function primary(){
   if(S.screen==='start') $('#btnStart') && $('#btnStart').click();
-  else if(S.screen==='map'){ const p=document.querySelector('#scr-map .map-planet.current'); p&&p.click(); }
+  else if(S.screen==='map'){ const p=document.querySelector('#scr-map .map-planet.current'); p&&goToBattle(+p.dataset.i); }
   else if(S.screen==='victory') $('#btnNext') && $('#btnNext').click();
   else if(S.screen==='defeat') $('#btnRetry') && $('#btnRetry').click();
   else if(S.screen==='final') $('#btnAgain') && $('#btnAgain').click();

@@ -1,0 +1,562 @@
+{
+  "version": 1,
+  "meta": {
+    "title": "Mentes Brillantes V2",
+    "subtitle": "Capacitación gamificada para staff",
+    "editar": "Cada misión usa: caso, q, a (4 opciones), c (índice 0-3), ok, bad, tip."
+  },
+  "worlds": [
+    {
+      "name": "Estrategia de Innovación",
+      "topic": "ESTRATEGIA",
+      "c": "#a855f7",
+      "cd": "#4c1d95",
+      "cl": "#e9d5ff",
+      "monster": "Sombra de la Duda",
+      "icon": "image/v2/world-estrategia.png",
+      "hero": { "name": "Dra. Lyra", "img": "image/doctor.png" },
+      "briefing": {
+        "goal": "Aprenderás a alinear la innovación con los objetivos del negocio y a decidir dónde jugar.",
+        "threat": "La Sombra de la Duda aparece cuando el equipo improvisa sin rumbo estratégico.",
+        "context": "En una EPS, cada iniciativa compite por tiempo clínico, presupuesto y atención de la dirección."
+      },
+      "learnings": [
+        "La innovación empieza alineada a objetivos del negocio, no a la tecnología de moda.",
+        "El portafolio equilibra corto, mediano y largo plazo.",
+        "Una buena estrategia responde: dónde jugar y cómo ganar."
+      ],
+      "missions": [
+        {
+          "caso": "Un área propone comprar una app de moda porque 'todas las EPS la usan'. No hay vínculo claro con metas de experiencia o costos.",
+          "q": "¿Cuál es el mejor punto de partida?",
+          "a": [
+            "Comprar la tecnología de moda",
+            "Alinear la idea con objetivos del negocio",
+            "Copiar a la competencia",
+            "Crear un eslogan creativo"
+          ],
+          "c": 1,
+          "ok": "Correcto: primero se define el problema de negocio y el resultado esperado.",
+          "bad": "Empezar por la herramienta suele generar proyectos costosos sin impacto.",
+          "tip": "Pregunta: ¿qué indicador mejora si esto funciona?"
+        },
+        {
+          "caso": "El call center mejora scripts y tiempos de respuesta cada mes. No es un cambio radical, pero reduce quejas.",
+          "q": "¿Qué tipo de innovación es?",
+          "a": [
+            "Innovación incremental",
+            "Innovación disruptiva",
+            "Innovación accidental",
+            "Innovación decorativa"
+          ],
+          "c": 0,
+          "ok": "Es incremental: mejora continua de un proceso existente.",
+          "bad": "No todo cambio grande es disruptivo; aquí hay mejora gradual.",
+          "tip": "Documenta mejoras pequeñas: suman valor real al afiliado."
+        },
+        {
+          "caso": "Se lanza un canal digital que permite autorizar servicios en minutos y cambia la forma de atender.",
+          "q": "¿Qué tipo de innovación describe mejor este caso?",
+          "a": [
+            "Innovación incremental",
+            "Innovación cosmética",
+            "Innovación disruptiva",
+            "Innovación operativa menor"
+          ],
+          "c": 2,
+          "ok": "Crea una forma nueva de operar y cambia las reglas del juego.",
+          "bad": "Si cambia el modelo de atención, no es solo un ajuste cosmético.",
+          "tip": "Identifica si el valor es 'mejorar lo actual' o 'hacerlo distinto'."
+        },
+        {
+          "caso": "Hay 20 ideas en curso: unas para este trimestre, otras a 2 años. Nadie ve el equilibrio del portafolio.",
+          "q": "¿Para qué sirve un portafolio de innovación?",
+          "a": [
+            "Archivar ideas rechazadas",
+            "Guardar logos de la empresa",
+            "Medir asistencia del personal",
+            "Balancear corto, mediano y largo plazo"
+          ],
+          "c": 3,
+          "ok": "El portafolio evita poner todo en un solo horizonte de tiempo.",
+          "bad": "Sin balance, se satura el corto plazo y se abandona el futuro.",
+          "tip": "Clasifica iniciativas por impacto y horizonte temporal."
+        },
+        {
+          "caso": "Dirección pide 'una estrategia de innovación'. El equipo no sabe qué debe responder ese documento.",
+          "q": "¿Qué debe responder una buena estrategia?",
+          "a": [
+            "Cuántas reuniones hacer al mes",
+            "Dónde jugar y cómo ganar",
+            "Qué colores usar en la marca",
+            "Quién llega más temprano"
+          ],
+          "c": 1,
+          "ok": "Define arenas de juego y la ventaja con la que se gana.",
+          "bad": "Una lista de reuniones no es estrategia.",
+          "tip": "Escribe en una frase: para quién innovamos y qué resultado buscamos."
+        }
+      ]
+    },
+    {
+      "name": "Gobierno de Innovación",
+      "topic": "GOBIERNO",
+      "c": "#f97316",
+      "cd": "#7c2d12",
+      "cl": "#ffedd5",
+      "monster": "Barón de la Burocracia",
+      "icon": "image/v2/world-gobierno.png",
+      "hero": { "name": "Enfermera Seren", "img": "image/enfermera.png" },
+      "briefing": {
+        "goal": "Aprenderás roles, decisiones y reglas claras para que la innovación avance sin atascarse.",
+        "threat": "El Barón de la Burocracia crece cuando nadie sabe quién decide ni con qué criterios.",
+        "context": "En salud, la gobernanza protege al paciente y también acelera lo que sí debe moverse."
+      },
+      "learnings": [
+        "Gobierno de innovación define quién decide, con qué criterios y en qué tiempo.",
+        "Los comités sirven si desbloquean, no si solo revisan.",
+        "Riesgo y compliance se diseñan junto a la velocidad, no después."
+      ],
+      "missions": [
+        {
+          "caso": "Una idea clínica lleva 4 meses en correos. Nadie sabe quién da el 'sí' final.",
+          "q": "¿Qué falla primero en este gobierno?",
+          "a": [
+            "Falta de un dueño de decisión claro",
+            "Falta de más reuniones",
+            "Falta de un logo nuevo",
+            "Falta de más herramientas"
+          ],
+          "c": 0,
+          "ok": "Sin rol decisor, el proceso se vuelve interminable.",
+          "bad": "Más reuniones sin dueño de decisión no desbloquean.",
+          "tip": "Nombra sponsor, líder y decisor por iniciativa."
+        },
+        {
+          "caso": "Un comité pide 12 firmas para un piloto de 30 afiliados.",
+          "q": "¿Cuál es la mejor práctica?",
+          "a": [
+            "Exigir las 12 firmas siempre",
+            "Adaptar controles al tamaño y riesgo del piloto",
+            "Saltar todos los controles",
+            "Cancelar el piloto"
+          ],
+          "c": 1,
+          "ok": "Gobierno proporcional: más control donde hay más riesgo.",
+          "bad": "El mismo trámite para todo mata la experimentación.",
+          "tip": "Define umbrales: piloto chico ≠ despliegue masivo."
+        },
+        {
+          "caso": "Legal y TI llegan al final del proyecto y lo detienen por cumplimiento.",
+          "q": "¿Cuándo deben involucrarse áreas de control?",
+          "a": [
+            "Solo al final",
+            "Desde el diseño del piloto",
+            "Nunca",
+            "Solo si hay queja"
+          ],
+          "c": 1,
+          "ok": "Incluirlas temprano evita rediseños caros y frena menos.",
+          "bad": "Llegar al final convierte el control en bloqueo.",
+          "tip": "Agenda un 'checkpoint de riesgos' en la primera semana."
+        },
+        {
+          "caso": "Hay 3 comités de innovación que se solapan y contradicen.",
+          "q": "¿Qué acción mejora el gobierno?",
+          "a": [
+            "Crear un cuarto comité",
+            "Clarificar mandatos y eliminar solapes",
+            "Eliminar toda gobernanza",
+            "Dejar que cada área decida sola siempre"
+          ],
+          "c": 1,
+          "ok": "Menos instancias, más claridad de mandato.",
+          "bad": "Más comités sin claridad aumentan el ruido.",
+          "tip": "Un mapa simple: quién propone, quién prioriza, quién aprueba."
+        },
+        {
+          "caso": "Una iniciativa se aprueba, pero no hay seguimiento de hitos ni criterios de salida.",
+          "q": "¿Qué falta en el gobierno?",
+          "a": [
+            "Criterios de avance y de stop",
+            "Más presentaciones visuales",
+            "Más personas en el chat",
+            "Un eslogan"
+          ],
+          "c": 0,
+          "ok": "Gobernar también es saber cuándo continuar, pivotar o parar.",
+          "bad": "Aprobar sin seguimiento no es gobernar.",
+          "tip": "Define 2–3 KPIs y una fecha de revisión."
+        }
+      ]
+    },
+    {
+      "name": "Proceso de Innovación",
+      "topic": "PROCESO",
+      "c": "#22c55e",
+      "cd": "#14532d",
+      "cl": "#dcfce7",
+      "monster": "Caos de Ideas",
+      "icon": "image/v2/world-proceso.png",
+      "hero": { "name": "Luna la Innovadora", "img": "image/cirujano.png" },
+      "briefing": {
+        "goal": "Aprenderás a pasar de idea a piloto con un proceso claro: entender, idear, probar y aprender.",
+        "threat": "El Caos de Ideas aparece cuando hay lluvia de ideas sin validación ni foco.",
+        "context": "En operación de EPS, un piloto bien diseñado reduce riesgo clínico y operativo."
+      },
+      "learnings": [
+        "Primero se entiende el problema con evidencia, luego se idean soluciones.",
+        "Un piloto pequeño enseña más que un lanzamiento prematuro.",
+        "Medir y aprender cierra el ciclo de innovación."
+      ],
+      "missions": [
+        {
+          "caso": "El equipo salta directo a diseñar una app sin hablar con afiliados ni personal de ventanilla.",
+          "q": "¿Qué paso falta?",
+          "a": [
+            "Validar el problema con usuarios reales",
+            "Comprar más servidores",
+            "Hacer un video promocional",
+            "Contratar más proveedores"
+          ],
+          "c": 0,
+          "ok": "Sin entender el problema, se inventa una solución inútil.",
+          "bad": "Diseñar primero y preguntar después suele fallar.",
+          "tip": "Haz 5 entrevistas cortas antes de construir."
+        },
+        {
+          "caso": "Hay 40 ideas en un mural y ninguna priorizada.",
+          "q": "¿Qué hacer después de idear?",
+          "a": [
+            "Ejecutar todas a la vez",
+            "Priorizar por impacto y factibilidad",
+            "Archivar todo",
+            "Elegir la idea más cara"
+          ],
+          "c": 1,
+          "ok": "Priorizar convierte ideas en un plan accionable.",
+          "bad": "Hacer todo es no hacer nada con calidad.",
+          "tip": "Usa una matriz impacto/esfuerzo en 15 minutos."
+        },
+        {
+          "caso": "Quieren lanzar un nuevo flujo a todos los puntos de atención el mismo día.",
+          "q": "¿Cuál es mejor siguiente paso?",
+          "a": [
+            "Despliegue total inmediato",
+            "Piloto controlado en un sitio",
+            "Solo una campaña en redes",
+            "Esperar un año sin probar"
+          ],
+          "c": 1,
+          "ok": "El piloto reduce riesgo y genera aprendizaje real.",
+          "bad": "Un big bang sin prueba puede romper la operación.",
+          "tip": "Define alcance, duración y métricas del piloto."
+        },
+        {
+          "caso": "El piloto terminó, pero nadie documentó qué funcionó ni qué no.",
+          "q": "¿Qué cierra bien el ciclo?",
+          "a": [
+            "Celebrar y olvidar",
+            "Capturar aprendizajes y decidir siguiente paso",
+            "Borrar los datos",
+            "Cambiar de tema"
+          ],
+          "c": 1,
+          "ok": "Innovar es aprender sistemáticamente, no solo lanzar.",
+          "bad": "Sin aprendizaje, se repiten los mismos errores.",
+          "tip": "Una página: hipótesis, resultado, decisión."
+        },
+        {
+          "caso": "Una mejora de proceso se implementa, pero nadie la monitorea a 30 días.",
+          "q": "¿Qué falta en el proceso?",
+          "a": [
+            "Medición post-implementación",
+            "Más colores en la presentación",
+            "Más reuniones de kickoff",
+            "Un nuevo nombre de proyecto"
+          ],
+          "c": 0,
+          "ok": "Sin medición, no sabes si el valor se sostuvo.",
+          "bad": "Implementar no es lo mismo que lograr el resultado.",
+          "tip": "Agenda revisión a 30 y 90 días con un dueño."
+        }
+      ]
+    },
+    {
+      "name": "Cultura de Innovación",
+      "topic": "CULTURA",
+      "c": "#3b82f6",
+      "cd": "#1e3a8a",
+      "cl": "#dbeafe",
+      "monster": "Espectro del Conformismo",
+      "icon": "image/v2/world-cultura.png",
+      "hero": { "name": "Sanadora Fëa", "img": "image/terapeuta.png" },
+      "briefing": {
+        "goal": "Aprenderás a fomentar experimentación segura, feedback y reconocimiento en el día a día.",
+        "threat": "El Espectro del Conformismo gana cuando el error se castiga y nadie propone.",
+        "context": "La cultura se ve en cómo reacciona un líder cuando un piloto no da el resultado esperado."
+      },
+      "learnings": [
+        "La cultura se construye con comportamientos visibles, no con afiches.",
+        "El error de aprendizaje se diferencia del error de negligencia.",
+        "Reconocer aportes pequeños sostiene la innovación."
+      ],
+      "missions": [
+        {
+          "caso": "Un colaborador propone una mejora y recibe burla en la reunión.",
+          "q": "¿Qué efecto tiene en la cultura?",
+          "a": [
+            "Fomenta más ideas",
+            "Reduce la participación futura",
+            "Acelera la innovación",
+            "Mejora la calidad del debate"
+          ],
+          "c": 1,
+          "ok": "El ridículo enseña a callar. La cultura se rompe en público.",
+          "bad": "Ese tipo de reacción no 'filtra' ideas: las apaga.",
+          "tip": "Agradece la propuesta antes de criticarla."
+        },
+        {
+          "caso": "Un piloto no cumple la métrica. El líder pregunta qué aprendieron y qué ajustar.",
+          "q": "¿Qué práctica cultural refleja?",
+          "a": [
+            "Castigo por fallar",
+            "Aprendizaje seguro",
+            "Conformismo",
+            "Ignorar resultados"
+          ],
+          "c": 1,
+          "ok": "Separar 'falló la hipótesis' de 'falló la persona'.",
+          "bad": "Castigar el intento mata la experimentación.",
+          "tip": "Usa la frase: ¿qué aprendimos y qué probamos ahora?"
+        },
+        {
+          "caso": "Solo gerencia puede proponer ideas; el personal de primera línea no tiene canal.",
+          "q": "¿Qué conviene hacer?",
+          "a": [
+            "Mantener ideas solo en gerencia",
+            "Abrir un canal simple para ideas de campo",
+            "Prohibir propuestas",
+            "Pedir ideas solo una vez al año"
+          ],
+          "c": 1,
+          "ok": "Quien atiende al afiliado ve fricciones reales.",
+          "bad": "Cerrar el canal pierde conocimiento operativo.",
+          "tip": "Un buzón digital + respuesta en 10 días crea confianza."
+        },
+        {
+          "caso": "Un equipo logró una mejora pequeña de tiempo de atención. Nadie lo menciona.",
+          "q": "¿Qué acción cultural ayuda más?",
+          "a": [
+            "Ignorarlo porque es pequeño",
+            "Reconocer públicamente el aporte",
+            "Pedir que lo oculten",
+            "Solo premiar proyectos millonarios"
+          ],
+          "c": 1,
+          "ok": "El reconocimiento refuerza el comportamiento deseado.",
+          "bad": "Si solo se celebra lo enorme, nadie intenta lo útil.",
+          "tip": "Dedica 2 minutos de reunión a 'victorias de la semana'."
+        },
+        {
+          "caso": "Hay miedo a probar porque 'si falla, afecta la evaluación'.",
+          "q": "¿Qué mensaje debe dar liderazgo?",
+          "a": [
+            "Prohibir cualquier riesgo",
+            "Permitir experimentos acotados con aprendizaje",
+            "Evaluar solo por cantidad de ideas",
+            "Evitar hablar del tema"
+          ],
+          "c": 1,
+          "ok": "Innovar requiere espacio seguro con límites claros.",
+          "bad": "Prohibir riesgo no elimina problemas: los esconde.",
+          "tip": "Define qué riesgos sí se pueden tomar en un piloto."
+        }
+      ]
+    },
+    {
+      "name": "Gestión del Conocimiento y PI",
+      "topic": "CONOCIMIENTO",
+      "c": "#eab308",
+      "cd": "#713f12",
+      "cl": "#fef9c3",
+      "monster": "Devorador del Olvido",
+      "icon": "image/v2/world-conocimiento.png",
+      "hero": { "name": "Elara", "img": "image/recepcionista.png" },
+      "briefing": {
+        "goal": "Aprenderás a capturar, compartir y proteger conocimiento e innovaciones de valor.",
+        "threat": "El Devorador del Olvido gana cuando el saber se va con la persona o no se documenta.",
+        "context": "En una EPS, perder un know-how operativo o un desarrollo propio tiene costo real."
+      },
+      "learnings": [
+        "El conocimiento debe quedar en el sistema, no solo en la cabeza de alguien.",
+        "Compartir aprendizajes evita reinventar la rueda.",
+        "La propiedad intelectual se protege cuando hay valor diferenciador."
+      ],
+      "missions": [
+        {
+          "caso": "La persona clave de autorizaciones se va y nadie sabe cómo se resolvían casos difíciles.",
+          "q": "¿Qué falló?",
+          "a": [
+            "Gestión del conocimiento",
+            "El color del uniforme",
+            "La velocidad del WiFi",
+            "El nombre del comité"
+          ],
+          "c": 0,
+          "ok": "El saber crítico no estaba documentado ni transferido.",
+          "bad": "No es un tema de 'suerte': es un riesgo prevenible.",
+          "tip": "Documenta flujos críticos y haz shadowing antes de una salida."
+        },
+        {
+          "caso": "Dos sedes resolvieron el mismo problema con soluciones distintas y no se enteraron.",
+          "q": "¿Qué práctica ayuda?",
+          "a": [
+            "Compartir aprendizajes entre sedes",
+            "Prohibir soluciones locales",
+            "Ignorar lo que hacen otras sedes",
+            "Empezar de cero siempre"
+          ],
+          "c": 0,
+          "ok": "El conocimiento se multiplica cuando circula.",
+          "bad": "Silenciar aprendizajes localmente encarece la operación.",
+          "tip": "Una 'hora de aprendizaje' mensual entre sedes basta para empezar."
+        },
+        {
+          "caso": "Un equipo crea un algoritmo interno útil y lo publica completo en redes sin revisión.",
+          "q": "¿Qué riesgo hay?",
+          "a": [
+            "Ninguno",
+            "Filtrar valor o PI sin protección",
+            "Mejorar la marca siempre",
+            "Acelerar competencia sana sin costo"
+          ],
+          "c": 1,
+          "ok": "Hay que evaluar qué se comparte y qué se protege.",
+          "bad": "No todo lo útil debe hacerse público de inmediato.",
+          "tip": "Consulta a legal/PI antes de publicar desarrollos propios."
+        },
+        {
+          "caso": "Los aprendizajes de pilotos quedan en presentaciones sueltas en correos.",
+          "q": "¿Dónde deberían vivir?",
+          "a": [
+            "En un repositorio accesible y vivo",
+            "Solo en el chat del equipo",
+            "Solo en la memoria del líder",
+            "En un USB personal"
+          ],
+          "c": 0,
+          "ok": "Un lugar común y buscable evita el olvido institucional.",
+          "bad": "El correo no es un sistema de conocimiento.",
+          "tip": "Una plantilla corta + carpeta por mundo/tema."
+        },
+        {
+          "caso": "Una mejora de proceso se copia de un proveedor sin revisar derechos ni contrato.",
+          "q": "¿Qué conviene hacer?",
+          "a": [
+            "Usarla igual sin preguntar",
+            "Revisar derechos, contratos y autoría",
+            "Asumir que todo es libre",
+            "Ocultar el origen"
+          ],
+          "c": 1,
+          "ok": "Innovar también implica respetar propiedad intelectual ajena.",
+          "bad": "Ignorar derechos genera riesgo legal y reputacional.",
+          "tip": "Guarda evidencias de origen y licencias."
+        }
+      ]
+    },
+    {
+      "name": "Ecosistema de Innovación",
+      "topic": "ECOSISTEMA",
+      "c": "#ec4899",
+      "cd": "#831843",
+      "cl": "#fce7f3",
+      "monster": "Titán del Estancamiento",
+      "icon": "image/v2/world-ecosistema.png",
+      "hero": { "name": "Dra. Nova", "img": "image/bacteriologa.png" },
+      "briefing": {
+        "goal": "Aprenderás a innovar con aliados: proveedores, startups, academia y redes internas.",
+        "threat": "El Titán del Estancamiento aparece cuando la organización se cierra e intenta resolverlo todo sola.",
+        "context": "Una EPS innova más rápido cuando conecta capacidades internas con partners externos."
+      },
+      "learnings": [
+        "El ecosistema multiplica capacidad: no todo se construye adentro.",
+        "Un buen partner se elige por valor y ajuste, no solo por precio.",
+        "La innovación abierta requiere reglas claras de datos y resultados."
+      ],
+      "missions": [
+        {
+          "caso": "Quieren digitalizar un proceso y el equipo interno no tiene capacidad en 12 meses.",
+          "q": "¿Qué opción de ecosistema es razonable?",
+          "a": [
+            "Esperar sin buscar aliados",
+            "Evaluar partner o startup con piloto acotado",
+            "Comprar sin criterios",
+            "Copiar un PDF de otra EPS"
+          ],
+          "c": 1,
+          "ok": "Un aliado acelera si hay piloto, métricas y salida clara.",
+          "bad": "Aislarse retrasa el valor al afiliado.",
+          "tip": "Define qué se compra, qué se co-crea y qué se retiene."
+        },
+        {
+          "caso": "Un proveedor ofrece 'solución mágica' sin acceso a datos ni resultados medibles.",
+          "q": "¿Qué exigir?",
+          "a": [
+            "Confianza ciega",
+            "Métricas, alcance y prueba de valor",
+            "Solo el precio más bajo",
+            "Un logo más grande"
+          ],
+          "c": 1,
+          "ok": "Sin prueba de valor, no hay alianza: hay riesgo.",
+          "bad": "El precio bajo no sustituye evidencia.",
+          "tip": "Pide caso de uso, KPIs y plan de piloto."
+        },
+        {
+          "caso": "Academia propone investigar un problema de adherencia con datos de afiliados.",
+          "q": "¿Qué debe cuidarse primero?",
+          "a": [
+            "Solo la fecha del evento",
+            "Privacidad, ética y reglas de uso de datos",
+            "El color de las diapositivas",
+            "Evitar cualquier alianza"
+          ],
+          "c": 1,
+          "ok": "La colaboración externa exige gobierno de datos.",
+          "bad": "Innovar no justifica saltarse privacidad.",
+          "tip": "Acuerda propósito, anonimización y dueño del resultado."
+        },
+        {
+          "caso": "Cada área negocia partners por separado y se duplican contratos.",
+          "q": "¿Qué mejora el ecosistema interno?",
+          "a": [
+            "Visibilidad y coordinación de alianzas",
+            "Prohibir partners",
+            "Más contratos sin revisión",
+            "Ignorar solapes"
+          ],
+          "c": 0,
+          "ok": "Un mapa de partners evita costos y conflictos.",
+          "bad": "Fragmentar alianzas debilita el poder de negociación.",
+          "tip": "Mantén un inventario simple de partners activos."
+        },
+        {
+          "caso": "Una alianza terminó y nadie capturó qué capacidades quedaron en la EPS.",
+          "q": "¿Qué práctica cierra bien una colaboración?",
+          "a": [
+            "Olvidar y seguir",
+            "Transferir aprendizajes y capacidades internas",
+            "Borrar toda evidencia",
+            "Culpar al partner"
+          ],
+          "c": 1,
+          "ok": "El ecosistema debe dejar músculo interno, no solo dependencia.",
+          "bad": "Sin transferencia, cada alianza reinicia el aprendizaje en cero.",
+          "tip": "Incluye 'transferencia' como entregable del contrato."
+        }
+      ]
+    }
+  ]
+}
