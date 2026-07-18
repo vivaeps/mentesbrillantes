@@ -4,11 +4,57 @@
 let DATA = null, WORLDS = [];
 const SAVE_KEY = 'mentes-brillantes-v3';
 const ANIM = {
-  idle: { count: 8, fps: 5, loop: true },
-  move: { count: 8, fps: 7, loop: true },
-  attack: { count: 8, fps: 7, loop: false },
-  hit: { count: 6, fps: 5, loop: false }
+  idle: { count: 8, fps: 8, loop: true },
+  move: { count: 8, fps: 10, loop: true },
+  attack: { count: 8, fps: 12, loop: false },
+  hit: { count: 6, fps: 10, loop: false }
 };
+/* Cache de Image ya decodificadas: evita re-decodificar PNGs grandes al cambiar de frame. */
+const FRAME_CACHE = new Map();
+
+/* Los 6 avatares seleccionables. portrait = retrato usado en la pantalla de
+   selección y en el cuadro de pregunta; img = render de cuerpo completo. */
+const HEROES = [
+  {
+    id: 'doctor', anim: 'doctor', gender: 'm',
+    name: 'Dr. Aelion', role: 'El Médico Élfico',
+    desc: 'Sabio y estratégico, domina el diagnóstico y la toma de decisiones clínicas.',
+    portrait: 'image/v3/bg/w1-estrategia-char.png', img: 'image/doctor.png'
+  },
+  {
+    id: 'enfermera', anim: 'enfermera', gender: 'f',
+    name: 'Lyra', role: 'La Enfermera Élfica',
+    desc: 'Veloz y empática, su cuidado es su arma más poderosa en batalla.',
+    portrait: 'image/v3/bg/w2-gobierno-char.png', img: 'image/enfermera.png'
+  },
+  {
+    id: 'cirujano', anim: 'cirujano', gender: 'm',
+    name: 'Thalric', role: 'El Cirujano Élfico',
+    desc: 'Preciso como una hoja de bisturí, sus habilidades son legendarias.',
+    portrait: 'image/v3/bg/w3-proceso-char.png', img: 'image/cirujano.png'
+  },
+  {
+    id: 'terapeuta', anim: 'terapeuta', gender: 'f',
+    name: 'Sylvaine', role: 'La Terapeuta Élfica',
+    desc: 'Maestra de la recuperación y el equilibrio entre cuerpo y mente.',
+    portrait: 'image/v3/bg/w4-cultura-char.png', img: 'image/terapeuta.png'
+  },
+  {
+    id: 'recepcionista', anim: 'recepcionista', gender: 'f',
+    name: 'Freya', role: 'La Recepcionista Élfica',
+    desc: 'Coordinadora del caos, organiza y protege con maestría.',
+    portrait: 'image/v3/bg/w5-conocimiento-char.png', img: 'image/recepcionista.png'
+  },
+  {
+    id: 'bacteriologa', anim: 'bacteriologa', gender: 'f',
+    name: 'Vexara', role: 'La Bacterióloga Élfica',
+    desc: 'Detecta lo invisible: su ciencia es su escudo y su espada.',
+    portrait: 'image/v3/bg/w6-ecosistema-char.png', img: 'image/bacteriologa.png'
+  }
+];
+function currentHero() {
+  return HEROES.find(h => h.id === S.heroId) || HEROES[0];
+}
 
 const $ = s => document.querySelector(s);
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -20,7 +66,7 @@ const go = id => {
 };
 
 const S = {
-  screen: 'load', current: 0, conquered: [], totalXP: 0, totalOK: 0, totalQ: 0
+  screen: 'load', current: 0, conquered: [], totalXP: 0, totalOK: 0, totalQ: 0, heroId: null
 };
 let B = null, tmr = null, tLeft = 10, players = new WeakMap();
 
@@ -30,6 +76,85 @@ function animPath(slug, action, i) {
 function fallbackPath(slug) {
   if (slug === 'monstruo') return 'image/monstruo.png';
   return `image/${slug}.png`;
+}
+/* Idle: los frame-XX traen onion-skin y las keys _keys/* no tienen alpha (fondo negro).
+   Usamos el render estático con transparencia. */
+function idleStillPath(slug) {
+  return fallbackPath(slug);
+}
+
+function warmFrame(url) {
+  let img = FRAME_CACHE.get(url);
+  if (img) {
+    if (img.complete && img.naturalWidth) return Promise.resolve(img);
+    return new Promise(res => {
+      img.addEventListener('load', () => res(img), { once: true });
+      img.addEventListener('error', () => res(img), { once: true });
+    });
+  }
+  img = new Image();
+  FRAME_CACHE.set(url, img);
+  return new Promise(res => {
+    img.onload = img.onerror = () => res(img);
+    img.src = url;
+  });
+}
+
+function applyFrame(img, src, fallback) {
+  const cached = FRAME_CACHE.get(src);
+  if (cached && cached.complete && cached.naturalWidth) {
+    img.dataset.frameSrc = src;
+    img.src = cached.src;
+    return true;
+  }
+  if (fallback) {
+    img.dataset.frameSrc = fallback;
+    img.src = fallback;
+  }
+  return false;
+}
+
+/* Crossfade al volver a idle para no cortar la pose de ataque/golpe */
+async function settleToIdle(img, slug, token) {
+  const src = idleStillPath(slug);
+  await warmFrame(src);
+  if (players.get(img)?.token !== token) return;
+
+  const fromSrc = img.currentSrc || img.src;
+  if (!fromSrc || img.dataset.frameSrc === src) {
+    applyFrame(img, src) || (img.src = src);
+    img.style.opacity = '';
+    return;
+  }
+
+  const slot = img.closest('.char-slot') || img.parentElement;
+  slot?.querySelectorAll('.char-ghost').forEach(el => el.remove());
+
+  const ghost = document.createElement('img');
+  ghost.className = 'char-anim char-ghost';
+  ghost.alt = '';
+  ghost.src = fromSrc;
+  slot.appendChild(ghost);
+
+  applyFrame(img, src) || (img.src = src);
+  img.classList.add('char-fade');
+  img.style.opacity = '0';
+  ghost.style.opacity = '1';
+
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  if (players.get(img)?.token !== token) {
+    ghost.remove();
+    img.classList.remove('char-fade');
+    img.style.opacity = '';
+    return;
+  }
+
+  ghost.style.opacity = '0';
+  img.style.opacity = '1';
+  await sleep(320);
+  ghost.remove();
+  img.classList.remove('char-fade');
+  img.style.opacity = '';
 }
 
 /* ---------- Frame player ---------- */
@@ -42,32 +167,51 @@ function setAction(img, slug, action, opts = {}) {
   img.dataset.animSlug = slug;
   img.dataset.animAction = action;
 
+  // Idle estático limpio, con fundido si venimos de otra animación
+  if (action === 'idle') {
+    return settleToIdle(img, slug, token);
+  }
+
+  img.style.opacity = '';
+  img.classList.remove('char-fade');
+  img.closest('.char-slot')?.querySelectorAll('.char-ghost').forEach(el => el.remove());
+
   return new Promise(resolve => {
-    const start = performance.now();
     const duration = opts.duration || (cfg.count / cfg.fps) * 1000;
+    let start = 0;
+
+    function show(idx) {
+      const src = animPath(slug, action, idx);
+      if (img.dataset.frameSrc === src) return;
+      applyFrame(img, src);
+    }
+
     function tick(now) {
       if (players.get(img)?.token !== token) return resolve();
+      if (!start) start = now;
       const elapsed = now - start;
       let idx;
       if (cfg.loop) idx = Math.floor(elapsed / (1000 / cfg.fps)) % cfg.count;
       else idx = Math.min(cfg.count - 1, Math.floor((elapsed / duration) * cfg.count));
-      const src = animPath(slug, action, idx);
-      if (img.dataset.frameSrc !== src) {
-        img.dataset.frameSrc = src;
-        img.src = src;
-      }
+      show(idx);
       if (cfg.loop || elapsed < duration) requestAnimationFrame(tick);
       else {
-        if (opts.nextIdle !== false && action !== 'idle') setAction(img, slug, 'idle');
+        if (opts.nextIdle !== false) setAction(img, slug, 'idle');
         resolve();
       }
     }
-    img.onerror = () => {
-      img.onerror = null;
-      img.src = fallbackPath(slug);
-      resolve();
-    };
-    requestAnimationFrame(tick);
+
+    const seq = [];
+    for (let i = 0; i < cfg.count; i++) seq.push(warmFrame(animPath(slug, action, i)));
+    Promise.all(seq).then(() => {
+      if (players.get(img)?.token !== token) return resolve();
+      const first = FRAME_CACHE.get(animPath(slug, action, 0));
+      if (!first || !first.naturalWidth) {
+        img.src = fallbackPath(slug);
+        return resolve();
+      }
+      requestAnimationFrame(tick);
+    });
   });
 }
 
@@ -77,7 +221,8 @@ function save() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({
       version: DATA.version, conquered: S.conquered,
-      totalXP: S.totalXP, totalOK: S.totalOK, totalQ: S.totalQ, current: S.current
+      totalXP: S.totalXP, totalOK: S.totalOK, totalQ: S.totalQ, current: S.current,
+      heroId: S.heroId
     }));
   } catch (e) {}
 }
@@ -89,9 +234,16 @@ function load() {
     if (!Array.isArray(d.conquered) || d.conquered.length !== WORLDS.length) return;
     S.conquered = d.conquered; S.totalXP = d.totalXP || 0;
     S.totalOK = d.totalOK || 0; S.totalQ = d.totalQ || 0; S.current = d.current || 0;
+    if (HEROES.some(h => h.id === d.heroId)) S.heroId = d.heroId;
   } catch (e) {}
 }
 function hasProgress() { return S.totalQ > 0 || S.conquered.some(Boolean); }
+
+/* Mundo N solo si el anterior está conquistado (el 1 siempre abierto). */
+function isWorldUnlocked(i) {
+  if (i <= 0) return true;
+  return !!S.conquered[i - 1];
+}
 
 function shuffle4() {
   const a = [0, 1, 2, 3];
@@ -108,22 +260,14 @@ async function preloadAll() {
   urls.add(DATA.ui.startBg); urls.add(DATA.ui.finalBg); urls.add(DATA.ui.logo);
   WORLDS.forEach(w => {
     Object.values(w.bg || {}).forEach(u => urls.add(u));
-    urls.add(w.charAvatar); urls.add(w.hero.img); urls.add(w.icon);
-    // idle always; other actions preload lightly for first world heroes later in battle
-    for (let i = 0; i < ANIM.idle.count; i++) {
-      urls.add(animPath(w.hero.anim, 'idle', i));
-      urls.add(animPath('monstruo', 'idle', i));
-    }
+    urls.add(w.hero.img); urls.add(w.icon);
   });
-  // critical combat frames for all heroes + monster
-  WORLDS.forEach(w => {
-    ['move', 'attack', 'hit'].forEach(act => {
-      const n = ANIM[act].count;
-      for (let i = 0; i < n; i++) {
-        urls.add(animPath(w.hero.anim, act, i));
-        urls.add(animPath('monstruo', act, i));
-      }
-    });
+  HEROES.forEach(h => urls.add(h.portrait));
+  // el monstruo es compartido por todos los mundos: se precarga completo aquí
+  urls.add(idleStillPath('monstruo'));
+  ['move', 'attack', 'hit'].forEach(act => {
+    const n = ANIM[act].count;
+    for (let i = 0; i < n; i++) urls.add(animPath('monstruo', act, i));
   });
   const list = [...urls].filter(Boolean);
   const bar = $('#lbar'), txt = $('#ltxt');
@@ -132,18 +276,23 @@ async function preloadAll() {
   const chunk = 12;
   for (let i = 0; i < list.length; i += chunk) {
     const slice = list.slice(i, i + chunk);
-    await Promise.all(slice.map(url => new Promise(res => {
-      const img = new Image();
-      const done = () => {
-        loaded++;
-        const pct = Math.round(loaded / list.length * 100);
-        bar.style.width = pct + '%';
-        txt.textContent = msgs[Math.min(Math.floor(pct / 25), 4)];
-        res();
-      };
-      img.onload = done; img.onerror = done; img.src = url;
+    await Promise.all(slice.map(url => warmFrame(url).then(() => {
+      loaded++;
+      const pct = Math.round(loaded / list.length * 100);
+      bar.style.width = pct + '%';
+      txt.textContent = msgs[Math.min(Math.floor(pct / 25), 4)];
     })));
   }
+}
+
+/* Precarga los frames de animación del héroe elegido justo tras seleccionarlo */
+async function preloadHeroAnims(hero) {
+  const urls = [idleStillPath(hero.anim)];
+  ['move', 'attack', 'hit'].forEach(act => {
+    const n = ANIM[act].count;
+    for (let i = 0; i < n; i++) urls.push(animPath(hero.anim, act, i));
+  });
+  await Promise.all(urls.map(url => warmFrame(url)));
 }
 
 /* ---------- Screens ---------- */
@@ -161,98 +310,145 @@ function toast(msg) {
   toast._t = setTimeout(() => el.classList.remove('show'), 2200);
 }
 
+async function enterWithHero(heroId, next) {
+  S.heroId = heroId;
+  save();
+  await preloadHeroAnims(currentHero());
+  next();
+}
+
 function renderStart() {
   const s = $('#s-start');
   s.style.backgroundImage = `url('${DATA.ui.startBg}')`;
-  const orbit = $('#startOrbit');
-  if (orbit) {
-    const n = WORLDS.length;
-    const worlds = WORLDS.map((w, i) => {
-      const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n;
-      const r = 42; // % from center
-      const x = 50 + r * Math.cos(ang);
-      const y = 50 + r * Math.sin(ang);
-      return `<div class="orbit-world" style="left:${x}%;top:${y}%;color:${w.c}">
+  let selected = S.heroId || HEROES[0].id;
+
+  function heroById(id) {
+    return HEROES.find(h => h.id === id) || HEROES[0];
+  }
+
+  function worldBtn(i) {
+    const w = WORLDS[i];
+    const unlocked = isWorldUnlocked(i);
+    const won = !!S.conquered[i];
+    const lockCls = unlocked ? (won ? ' won' : ' open') : ' locked';
+    const status = !unlocked ? 'Bloqueado' : (won ? 'Conquistado' : `Mundo ${i + 1}`);
+    return `
+      <button type="button" class="galaxy-world${lockCls}" data-i="${i}" style="color:${w.c}" ${unlocked ? '' : 'aria-disabled="true"'}>
         <img src="${w.icon}" alt="">
+        <small>${status}</small>
         <span>${w.name}</span>
+        ${unlocked ? '' : '<em class="lock-badge">🔒 Completa el mundo anterior</em>'}
+      </button>`;
+  }
+
+  function paint() {
+    const h = heroById(selected);
+    let galaxyHtml;
+    if (WORLDS.length === 2) {
+      galaxyHtml = `
+        <div class="galaxy-ring"></div>
+        <div class="galaxy-ring galaxy-ring-2"></div>
+        ${worldBtn(0)}
+        <div class="galaxy-core"><img src="${DATA.ui.logo}" alt="Logo"></div>
+        ${worldBtn(1)}
+        <p class="galaxy-hint">Elige héroe abajo · toca un mundo desbloqueado para jugar</p>`;
+    } else {
+      const n = WORLDS.length;
+      const orbitWorlds = WORLDS.map((w, i) => {
+        const ang = -Math.PI / 2 + (i * 2 * Math.PI) / n;
+        const r = 38;
+        const x = 50 + r * Math.cos(ang);
+        const y = 50 + r * Math.sin(ang);
+        const unlocked = isWorldUnlocked(i);
+        return `<button type="button" class="galaxy-world${unlocked ? '' : ' locked'}" data-i="${i}" style="color:${w.c};position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%)">
+          <img src="${w.icon}" alt="">
+          <span>${w.name}</span>
+        </button>`;
+      }).join('');
+      galaxyHtml = `
+        <div class="galaxy-ring" style="aspect-ratio:1;width:min(92%,560px)"></div>
+        <div class="galaxy-core"><img src="${DATA.ui.logo}" alt="Logo"></div>
+        ${orbitWorlds}
+        <p class="galaxy-hint">Toca un mundo desbloqueado</p>`;
+    }
+
+    s.innerHTML = `
+      <div class="dim soft"></div>
+      <div class="hub">
+        <div class="hub-head">
+          <h1 class="hub-title gold-text">Mentes Brillantes</h1>
+          <p class="hub-sub">Demo Day · Grupo 1A · ${WORLDS.length} mundos en orden</p>
+        </div>
+        <div class="galaxy">${galaxyHtml}</div>
+        <div class="hub-heroes">
+          <p class="hub-hero-label" id="hubHeroLabel">Tu héroe: <b>${h.name}</b> · ${h.role}</p>
+          <div class="hub-roster">
+            ${HEROES.map(x => `
+              <button type="button" class="hub-hero-btn${x.id === selected ? ' sel' : ''}" data-id="${x.id}" title="${x.name}">
+                <img src="${x.portrait}" alt="">
+                <span>${x.name.split(' ').pop()}</span>
+              </button>`).join('')}
+          </div>
+          <div class="hub-cta-wrap">
+            <button type="button" class="btn bg hub-cta pulse-cta" id="btnStart">
+              ${S.conquered.every(Boolean)
+                ? 'Ver resultado final'
+                : `Jugar mundo ${Math.min(S.conquered.indexOf(false) + 1, WORLDS.length) || WORLDS.length}`}
+            </button>
+          </div>
+        </div>
       </div>`;
-    }).join('');
-    orbit.innerHTML = `
-      <div class="orbit-ring"></div>
-      <div class="orbit-core"><img src="${DATA.ui.logo}" alt="Logo"></div>
-      ${worlds}`;
-  }
-  let heroes = $('#startHeroes');
-  if (!heroes) {
-    heroes = document.createElement('div');
-    heroes.id = 'startHeroes';
-    heroes.className = 'start-heroes';
-    s.appendChild(heroes);
-  }
-  heroes.innerHTML = WORLDS.map(w => `<img src="${w.hero.img}" alt="${w.hero.name}">`).join('');
 
+    s.querySelectorAll('.hub-hero-btn').forEach(btn => {
+      btn.onclick = () => {
+        if (btn.dataset.id === selected) return;
+        selected = btn.dataset.id;
+        S.heroId = selected;
+        save();
+        const hero = heroById(selected);
+        s.querySelectorAll('.hub-hero-btn').forEach(b => b.classList.toggle('sel', b.dataset.id === selected));
+        const label = $('#hubHeroLabel');
+        if (label) label.innerHTML = `Tu héroe: <b>${hero.name}</b> · ${hero.role}`;
+      };
+    });
+
+    s.querySelectorAll('.galaxy-world').forEach(btn => {
+      btn.onclick = async () => {
+        const i = +btn.dataset.i;
+        if (!isWorldUnlocked(i)) {
+          toast('Primero conquista el Mundo ' + i);
+          return;
+        }
+        btn.disabled = true;
+        await enterWithHero(selected, () => renderBrief(i));
+      };
+    });
+
+    const cta = $('#btnStart');
+    if (cta) {
+      cta.onclick = async () => {
+        if (S.conquered.every(Boolean)) {
+          renderFinal();
+          return;
+        }
+        const next = S.conquered.indexOf(false);
+        const i = next < 0 ? 0 : next;
+        cta.disabled = true;
+        cta.textContent = 'Cargando...';
+        await enterWithHero(selected, () => renderBrief(i));
+      };
+    }
+  }
+
+  paint();
   go('s-start');
-  const btn = $('#btnStart');
-  if (btn) {
-    btn.textContent = hasProgress() ? 'Continuar misiones' : 'Iniciar misiones';
-    btn.onclick = () => renderMap();
-  }
-  const opt = $('#btnOptions');
-  if (opt) opt.onclick = () => toast('Opciones: próximamente en V3');
-  const set = $('#btnSettings');
-  if (set) set.onclick = () => toast('Ajustes: próximamente en V3');
-}
-
-function renderMap() {
-  const cur = S.conquered.indexOf(false);
-  const cnt = S.conquered.filter(Boolean).length;
-  const dots = WORLDS.map((w, i) => {
-    const won = S.conquered[i];
-    const current = i === cur;
-    const cls = won ? 'won' : (current ? 'current' : '');
-    return `<div class="wdot ${cls}" data-i="${i}" style="color:${w.c};border-color:${won || current ? w.c : 'rgba(255,255,255,.12)'}">
-      <img src="${w.icon}" alt="">
-      <small>M${i + 1}</small>
-    </div>`;
-  }).join('');
-  $('#s-map').innerHTML = `
-    <div class="map-box">
-      <div class="ptit">SISTEMA MENTES BRILLANTES</div>
-      <div class="psub">Mundos conquistados: ${cnt} / ${WORLDS.length}${S.totalXP ? ` · XP ${S.totalXP.toLocaleString('es-CO')}` : ''}</div>
-      <div class="wdots">${dots}</div>
-      <div class="lwrap">
-        <img src="${DATA.ui.logo}" alt="Logo">
-        <canvas id="lcanvas" width="120" height="120"></canvas>
-      </div>
-      <div class="play-hint">${cur >= 0 ? 'Toca el mundo iluminado para el briefing' : 'Todos los mundos conquistados'}</div>
-      <div class="clabel">${cnt ? S.conquered.map((v, i) => v ? WORLDS[i].name : null).filter(Boolean).join(' · ') : 'Ninguno aún'}</div>
-      ${cur < 0 ? `<button class="btn bg" id="btnFinal">VER RESULTADO FINAL</button>` : ''}
-    </div>
-    <div class="hint"><b>Enter</b> continuar · <b>1-4 / A-D</b> decidir</div>`;
-  drawRing();
-  document.querySelectorAll('#s-map .wdot.current').forEach(d => {
-    d.onclick = () => renderBrief(+d.dataset.i);
-  });
-  const bf = $('#btnFinal');
-  if (bf) bf.onclick = () => renderFinal();
-  go('s-map');
-}
-
-function drawRing() {
-  const c = $('#lcanvas'); if (!c) return;
-  const ctx = c.getContext('2d');
-  ctx.clearRect(0, 0, 120, 120);
-  const cx = 60, cy = 60, r = 58, sa = (2 * Math.PI) / WORLDS.length;
-  S.conquered.forEach((won, i) => {
-    if (!won) return;
-    const s = -Math.PI / 2 + i * sa, e = s + sa;
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, s, e); ctx.closePath();
-    ctx.fillStyle = WORLDS[i].c + '88'; ctx.fill();
-    ctx.strokeStyle = WORLDS[i].c; ctx.lineWidth = 2; ctx.stroke();
-  });
 }
 
 function renderBrief(i) {
+  if (!isWorldUnlocked(i)) {
+    toast('Primero conquista el Mundo ' + i);
+    return renderStart();
+  }
   S.current = i;
   const w = WORLDS[i];
   const scr = $('#s-brief');
@@ -261,7 +457,7 @@ function renderBrief(i) {
     <div class="dim"></div>
     <div class="brief-panel">
       <div class="brief-kicker" style="color:${w.c}">MUNDO ${i + 1} / ${WORLDS.length} · ${w.topic}</div>
-      <h2>${w.name}</h2>
+      <h2 class="gold-text">${w.name}</h2>
       <div class="brief-block"><b>OBJETIVO DE APRENDIZAJE</b><p>${w.briefing.goal}</p></div>
       <div class="brief-block"><b>AMENAZA: ${w.monster}</b><p>${w.briefing.threat}</p></div>
       <div class="brief-block"><b>CONTEXTO EPS / STAFF</b><p>${w.briefing.context}</p></div>
@@ -271,13 +467,14 @@ function renderBrief(i) {
       </div>
     </div>`;
   $('#btnBriefGo').onclick = () => startBattle(i);
-  $('#btnBriefBack').onclick = () => renderMap();
+  $('#btnBriefBack').onclick = () => renderStart();
   go('s-brief');
 }
 
 function startBattle(i) {
   S.current = i;
   const w = WORLDS[i];
+  const hero = currentHero();
   const maxHP = 90;
   B = {
     q: 0, heroHP: maxHP, monHP: maxHP, maxHP,
@@ -289,22 +486,26 @@ function startBattle(i) {
   scr.innerHTML = `
     <div class="arena">
       <div class="fighter hero">
-        <div class="plate"><div class="fname">${w.hero.name}</div>
+        <div class="plate"><div class="fname">${hero.name}</div>
           <div class="hpbar hp-hero"><div class="hpfill" id="hpHeroF"></div></div></div>
-        <img class="char-anim" id="heroAnim" alt="">
+        <div class="char-slot">
+          <img class="char-anim" id="heroAnim" alt="${hero.name}">
+        </div>
       </div>
       <div class="fighter mon">
         <div class="plate"><div class="fname" style="color:#ff9d8a">${w.monster}</div>
           <div class="hpbar hp-mon"><div class="hpfill" id="hpMonF"></div></div></div>
-        <img class="char-anim" id="monAnim" alt="">
+        <div class="char-slot">
+          <img class="char-anim" id="monAnim" alt="${w.monster}">
+        </div>
       </div>
     </div>
-    <div class="dim" style="background:rgba(0,0,0,.35)"></div>
+    <div class="dim" style="background:rgba(0,0,0,.22)"></div>
     <div class="qbox" id="qbox" style="color:${w.c}"></div>
     <div class="hint"><b>1-4 / A-D</b> decidir · <b>Enter</b> continuar</div>`;
   go('s-battle');
   setHP();
-  setAction($('#heroAnim'), w.hero.anim, 'idle');
+  setAction($('#heroAnim'), hero.anim, 'idle');
   setAction($('#monAnim'), 'monstruo', 'idle');
   renderQ();
 }
@@ -340,18 +541,22 @@ function updTimer() {
 
 function renderQ() {
   const w = WORLDS[S.current], m = w.missions[B.q];
+  const hero = currentHero();
   const order = shuffle4();
   B.correctPos = order.indexOf(m.c);
   B.lock = false;
   $('#qbox').innerHTML = `
     <div class="wbadge" style="color:${w.c}">MUNDO ${S.current + 1} — ${w.name.toUpperCase()}</div>
     <div class="toprow">
-      <img class="av" src="${w.charAvatar || w.hero.img}" alt="">
-      <div>
-        <div class="cname">${w.hero.name}</div>
-        <div class="tnum" id="tnum">${DATA.ui.timerSec || 10}</div>
+      <img class="av" src="${hero.portrait}" alt="">
+      <div class="toprow-main">
+        <div class="cname">${hero.name}</div>
+        <div class="qmeta">Caso ${B.q + 1} / ${w.missions.length}</div>
       </div>
-      <div style="flex:1;text-align:right;font-size:11px;color:#555">seg restantes · caso ${B.q + 1}/${w.missions.length}</div>
+      <div class="timer-block">
+        <div class="tnum" id="tnum">${DATA.ui.timerSec || 10}</div>
+        <div class="tlabel">seg</div>
+      </div>
     </div>
     <div class="tbar-w"><div class="tbar" id="tbar" style="width:100%"></div></div>
     <div class="caso">${m.caso}</div>
@@ -359,7 +564,7 @@ function renderQ() {
     <div class="agrid">${order.map((oi, pos) => `
       <button class="abtn" data-p="${pos}"><span class="L">${'ABCD'[pos]}</span>${m.a[oi]}</button>`).join('')}</div>`;
   document.querySelectorAll('#qbox .abtn').forEach(b => b.onclick = () => pick(+b.dataset.p));
-  setAction($('#heroAnim'), w.hero.anim, 'idle');
+  setAction($('#heroAnim'), hero.anim, 'idle');
   setAction($('#monAnim'), 'monstruo', 'idle');
   startTimer();
 }
@@ -367,18 +572,16 @@ function renderQ() {
 async function onTimeout() {
   if (!B || B.lock) return;
   B.lock = true;
-  const w = WORLDS[S.current], m = w.missions[B.q];
   document.querySelectorAll('#qbox .abtn').forEach(b => b.disabled = true);
   document.querySelectorAll('#qbox .abtn')[B.correctPos]?.classList.add('ok');
   S.totalQ++; B.results.push(false); save();
   await playStrike(false);
-  showFeedback(false, m, true);
+  afterFeedback();
 }
 
 async function pick(pos) {
   if (!B || B.lock) return;
   B.lock = true; clearTimer();
-  const w = WORLDS[S.current], m = w.missions[B.q];
   const btns = [...document.querySelectorAll('#qbox .abtn')];
   btns.forEach(b => b.disabled = true);
   const ok = pos === B.correctPos;
@@ -387,49 +590,37 @@ async function pick(pos) {
   btns[pos].classList.add(ok ? 'ok' : 'no');
   if (!ok) btns[B.correctPos].classList.add('ok');
   await playStrike(ok);
-  showFeedback(ok, m, false);
+  afterFeedback();
 }
 
 async function playStrike(ok) {
-  const w = WORLDS[S.current];
-  const hero = $('#heroAnim'), mon = $('#monAnim');
+  const hero = currentHero();
+  const heroEl = $('#heroAnim'), mon = $('#monAnim');
   if (ok) {
-    setAction(hero, w.hero.anim, 'move');
-    await sleep(650);
-    await setAction(hero, w.hero.anim, 'attack', { nextIdle: false });
+    setAction(heroEl, hero.anim, 'move');
+    await sleep(380);
+    await setAction(heroEl, hero.anim, 'attack', { nextIdle: false });
     const hitP = setAction(mon, 'monstruo', 'hit', { nextIdle: false });
     B.monHP = Math.max(0, B.monHP - (B.dmg || 30)); setHP();
     await hitP;
-    await sleep(280);
-    setAction(hero, w.hero.anim, 'idle');
-    setAction(mon, 'monstruo', 'idle');
+    await sleep(80);
+    await Promise.all([
+      setAction(heroEl, hero.anim, 'idle'),
+      setAction(mon, 'monstruo', 'idle')
+    ]);
   } else {
     setAction(mon, 'monstruo', 'move');
-    await sleep(650);
+    await sleep(380);
     await setAction(mon, 'monstruo', 'attack', { nextIdle: false });
-    const hitP = setAction(hero, w.hero.anim, 'hit', { nextIdle: false });
+    const hitP = setAction(heroEl, hero.anim, 'hit', { nextIdle: false });
     B.heroHP = Math.max(0, B.heroHP - (B.dmg || 30)); setHP();
     await hitP;
-    await sleep(280);
-    setAction(hero, w.hero.anim, 'idle');
-    setAction(mon, 'monstruo', 'idle');
+    await sleep(80);
+    await Promise.all([
+      setAction(heroEl, hero.anim, 'idle'),
+      setAction(mon, 'monstruo', 'idle')
+    ]);
   }
-}
-
-function showFeedback(ok, m, timedOut) {
-  const scr = $('#s-feedback');
-  const w = WORLDS[S.current];
-  scr.style.backgroundImage = `url('${w.bg.battle}')`;
-  scr.innerHTML = `
-    <div class="dim"></div>
-    <div class="fb-panel ${ok ? 'ok' : 'bad'}">
-      <div class="fb-title">${ok ? '¡ACIERTO!' : (timedOut ? '¡TIEMPO AGOTADO!' : 'OPORTUNIDAD DE APRENDER')}</div>
-      <div class="fb-body">${ok ? m.ok : m.bad}</div>
-      <div class="fb-tip"><b>TIP PARA EL DÍA A DÍA</b><p>${m.tip}</p></div>
-      <button class="btn bg" id="btnFb">CONTINUAR</button>
-    </div>`;
-  $('#btnFb').onclick = afterFeedback;
-  go('s-feedback');
 }
 
 async function afterFeedback() {
@@ -451,58 +642,102 @@ function renderVictory() {
   const xp = 10000 + (B.heroHP / (B.dmg || 30)) * 2500;
   S.totalXP += xp; save();
   const last = S.conquered.every(Boolean);
+  const hero = currentHero();
   const scr = $('#s-victory');
+
+  if (!last) {
+    const next = WORLDS[i + 1];
+    scr.style.backgroundImage = `url('${next.bg.transition}')`;
+    scr.innerHTML = `
+      <div class="dim soft"></div>
+      <div class="travel-layout">
+        <div class="travel-banner">
+          <h2 class="gold-text">¡Victoria!</h2>
+          <p>Viajando al Mundo ${i + 2}: <b>${next.name}</b></p>
+          <p class="travel-meta">${hero.name} · XP +${Math.round(xp).toLocaleString('es-CO')}</p>
+        </div>
+        <div class="travel-stage">
+          <img class="travel-hero char-anim" id="travelAnim" alt="${hero.name}" src="${hero.img}">
+        </div>
+        <div class="travel-actions">
+          <button class="btn bg" id="btnVNext">CONTINUAR</button>
+        </div>
+      </div>`;
+    go('s-victory');
+    setAction($('#travelAnim'), hero.anim, 'move');
+    $('#btnVNext').onclick = () => renderStart();
+    return;
+  }
+
   scr.style.backgroundImage = `url('${w.bg.victory}')`;
   scr.innerHTML = `
-    <div class="dim"></div>
-    <div class="rpanel">
-      <h2>¡VICTORIA!</h2>
-      <p>Conquistaste el Mundo ${i + 1}: ${w.name}</p>
-      <div class="learn-box">
+    <div class="dim soft"></div>
+    <div class="travel-layout">
+      <div class="travel-banner">
+        <h2 class="gold-text">¡Victoria!</h2>
+        <p>Conquistaste el Mundo ${i + 1}: ${w.name}</p>
+        <p class="travel-meta">XP +${Math.round(xp).toLocaleString('es-CO')} · Aciertos ${B.ok}/${B.results.length}</p>
+      </div>
+      <div class="travel-stage">
+        <img class="travel-hero" src="${hero.img}" alt="${hero.name}">
+      </div>
+      <div class="learn-box travel-learn">
         <h3>3 APRENDIZAJES CLAVE</h3>
         <ul>${w.learnings.map(l => `<li>${l}</li>`).join('')}</ul>
       </div>
-      <p>XP +${Math.round(xp).toLocaleString('es-CO')} · Aciertos ${B.ok}/${B.results.length}</p>
-      <button class="btn bg" id="btnVNext">${last ? 'VER RESULTADO FINAL' : 'CONTINUAR'}</button>
+      <div class="travel-actions">
+        <button class="btn bg" id="btnVNext">VER RESULTADO FINAL</button>
+      </div>
     </div>`;
-  $('#btnVNext').onclick = () => {
-    if (last) renderFinal();
-    else renderTrans(i + 1);
-  };
+  $('#btnVNext').onclick = () => renderFinal();
   go('s-victory');
 }
 
 function renderDefeat() {
   const w = WORLDS[S.current];
+  const hero = currentHero();
   const scr = $('#s-defeat');
   scr.style.backgroundImage = `url('${w.bg.defeat}')`;
   scr.innerHTML = `
-    <div class="dim"></div>
-    <div class="rpanel">
-      <h2>¡DERROTA!</h2>
-      <p>${w.monster} sigue dominando este mundo. Relee los tips e inténtalo de nuevo.</p>
-      <button class="btn br" id="btnRetry">VOLVER A INTENTAR</button>
-      <button class="btn ghost" style="margin-left:8px" id="btnDefMap">Mapa</button>
+    <div class="dim soft"></div>
+    <div class="defeat-layout">
+      <div class="defeat-banner">
+        <h2>¡DERROTA!</h2>
+        <p>${hero.name} cae ante ${w.monster}. Inténtalo de nuevo.</p>
+      </div>
+      <div class="defeat-stage">
+        <img class="defeat-hero" src="${hero.img}" alt="${hero.name}">
+      </div>
+      <div class="defeat-actions">
+        <button class="btn br" id="btnRetry">VOLVER A INTENTAR</button>
+        <button class="btn ghost" id="btnDefMap">Inicio</button>
+      </div>
     </div>`;
   $('#btnRetry').onclick = () => renderBrief(S.current);
-  $('#btnDefMap').onclick = () => renderMap();
+  $('#btnDefMap').onclick = () => renderStart();
   go('s-defeat');
 }
 
 function renderTrans(nextI) {
-  if (nextI >= WORLDS.length) return renderMap();
+  if (nextI >= WORLDS.length) return renderStart();
   const w = WORLDS[nextI];
+  const hero = currentHero();
   const scr = $('#s-trans');
   scr.style.backgroundImage = `url('${w.bg.transition}')`;
   scr.innerHTML = `
-    <div class="dim"></div>
-    <div class="tpanel">
-      <div class="spin"></div>
-      <h2>Viajando al Mundo ${nextI + 1}...</h2>
-      <p>${w.name} — Prepárate, ${w.hero.name}</p>
+    <div class="dim soft"></div>
+    <div class="travel-layout">
+      <div class="travel-banner">
+        <h2 class="gold-text">Viajando al Mundo ${nextI + 1}</h2>
+        <p><b>${w.name}</b> — Prepárate, ${hero.name}</p>
+      </div>
+      <div class="travel-stage">
+        <img class="travel-hero char-anim" id="travelAnim" alt="${hero.name}" src="${hero.img}">
+      </div>
     </div>`;
   go('s-trans');
-  setTimeout(() => renderMap(), 2200);
+  setAction($('#travelAnim'), hero.anim, 'move');
+  setTimeout(() => renderStart(), 2800);
 }
 
 function renderFinal() {
@@ -513,7 +748,7 @@ function renderFinal() {
     <div class="dim soft"></div>
     <div class="final-heroes">${WORLDS.map(w => `<img src="${w.hero.img}" alt="${w.hero.name}">`).join('')}</div>
     <div class="fpanel">
-      <h1>¡CONQUISTASTE EL SISTEMA<br>MENTES BRILLANTES!</h1>
+      <h1 class="gold-text">¡CONQUISTASTE EL SISTEMA<br>MENTES BRILLANTES!</h1>
       <p>Precisión ${S.totalOK}/${S.totalQ} (${pct}%) · XP ${S.totalXP.toLocaleString('es-CO')}</p>
       <div class="learn-box" style="text-align:left;margin:12px 0 18px">
         <h3>DOMINIOS</h3>
@@ -543,13 +778,7 @@ addEventListener('keydown', e => {
   if (['enter', ' '].includes(k)) {
     e.preventDefault();
     if (S.screen === 'start') $('#btnStart')?.click();
-    else if (S.screen === 'map') {
-      const d = document.querySelector('#s-map .wdot.current');
-      if (d) renderBrief(+d.dataset.i);
-      else $('#btnFinal')?.click();
-    }
     else if (S.screen === 'brief') $('#btnBriefGo')?.click();
-    else if (S.screen === 'feedback') $('#btnFb')?.click();
     else if (S.screen === 'victory') $('#btnVNext')?.click();
     else if (S.screen === 'defeat') $('#btnRetry')?.click();
     else if (S.screen === 'final') $('#btnAgain')?.click();

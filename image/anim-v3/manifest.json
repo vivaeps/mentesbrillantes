@@ -5,10 +5,10 @@
     1200
   ],
   "fps": {
-    "idle": 5,
-    "move": 7,
-    "attack": 7,
-    "hit": 5
+    "idle": 8,
+    "move": 10,
+    "attack": 12,
+    "hit": 10
   },
   "counts": {
     "idle": 8,
