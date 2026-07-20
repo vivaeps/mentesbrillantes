@@ -50,13 +50,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo1.png",
-        "victory": "image/v3/bg/w1-estrategia-victory-clean.png",
-        "defeat": "image/v3/bg/w1-estrategia-defeat-clean.png",
-        "transition": "image/v3/bg/w1-estrategia-transition-clean.png"
+        "battle": "image/v3/bg/mundo1.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w1-estrategia-char.png"
+      "monsterAnim": "monstruo"
     },
     {
       "name": "Gobierno de Innovación",
@@ -96,13 +92,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo2.png",
-        "victory": "image/v3/bg/w2-gobierno-victory-clean.png",
-        "defeat": "image/v3/bg/w2-gobierno-defeat-clean.png",
-        "transition": "image/v3/bg/w2-gobierno-transition-clean.png"
+        "battle": "image/v3/bg/mundo2.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w2-gobierno-char.png"
+      "monsterAnim": "monstruo"
     },
     {
       "name": "Proceso de Innovación",
@@ -142,13 +134,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo3.png",
-        "victory": "image/v3/bg/w3-proceso-victory-clean.png",
-        "defeat": "image/v3/bg/w3-proceso-defeat-clean.png",
-        "transition": "image/v3/bg/w3-proceso-transition-clean.png"
+        "battle": "image/v3/bg/mundo3.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w3-proceso-char.png"
+      "monsterAnim": "monstruo"
     },
     {
       "name": "Cultura de Innovación",
@@ -188,13 +176,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo4.png",
-        "victory": "image/v3/bg/w4-cultura-victory-clean.png",
-        "defeat": "image/v3/bg/w4-cultura-defeat-clean.png",
-        "transition": "image/v3/bg/w4-cultura-transition-clean.png"
+        "battle": "image/v3/bg/mundo4.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w4-cultura-char.png"
+      "monsterAnim": "monstruo"
     },
     {
       "name": "Gestión del Conocimiento",
@@ -234,13 +218,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo5.png",
-        "victory": "image/v3/bg/w5-conocimiento-victory-clean.png",
-        "defeat": "image/v3/bg/w5-conocimiento-defeat-clean.png",
-        "transition": "image/v3/bg/w5-conocimiento-transition-clean.png"
+        "battle": "image/v3/bg/mundo5.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w5-conocimiento-char.png"
+      "monsterAnim": "monstruo"
     },
     {
       "name": "Ecosistema de Innovación",
@@ -280,13 +260,9 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/mundo 6.png",
-        "victory": "image/v3/bg/w6-ecosistema-victory-clean.png",
-        "defeat": "image/v3/bg/w6-ecosistema-defeat-clean.png",
-        "transition": "image/v3/bg/w6-ecosistema-transition-clean.png"
+        "battle": "image/v3/bg/mundo 6.png"
       },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w6-ecosistema-char.png"
+      "monsterAnim": "monstruo"
     }
   ]
 }

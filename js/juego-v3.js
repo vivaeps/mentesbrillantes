@@ -16,14 +16,13 @@ const FRAME_CACHE = new Map();
 function currentHero() {
   const w = WORLDS[S.current] || WORLDS[0];
   if (!w?.hero) {
-    return { id: 'doctor', anim: 'doctor', name: 'Dr. Aelion', img: 'image/doctor.png', portrait: 'image/doctor.png' };
+    return { id: 'doctor', anim: 'doctor', name: 'Dr. Aelion', img: 'image/doctor.png' };
   }
   return {
     id: w.hero.anim,
     anim: w.hero.anim,
     name: w.hero.name,
-    img: w.hero.img,
-    portrait: w.charAvatar || w.hero.img
+    img: w.hero.img
   };
 }
 
@@ -388,7 +387,7 @@ async function preloadAll() {
   urls.add(DATA.ui.startBg); urls.add(DATA.ui.finalBg); urls.add(DATA.ui.logo);
   WORLDS.forEach(w => {
     Object.values(w.bg || {}).forEach(u => urls.add(u));
-    urls.add(w.hero.img); urls.add(w.icon); urls.add(w.charAvatar);
+    urls.add(w.hero.img); urls.add(w.icon);
     urls.add(idleStillPath(w.hero.anim));
     ['move', 'attack', 'hit'].forEach(act => {
       const n = ANIM[act].count;

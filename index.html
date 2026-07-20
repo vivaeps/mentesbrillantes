@@ -3,42 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sistema Mentes Brillantes — Conquista los 6 Mundos</title>
+<title>Sistema Mentes Brillantes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/estilos-v3.css">
 </head>
 <body>
-<div id="loader">
-  <div class="spin"></div>
-  <p>Cargando aventura...</p>
+<div id="s-load" class="screen active">
+  <img class="load-logo" id="loadLogo" src="image/v3/bg/logo-mentes.png" alt="Logo">
+  <div class="load-title gold-text">SISTEMA MENTES BRILLANTES</div>
+  <div class="load-sub">Trivia Demo Day Grupo 1A</div>
+  <div class="load-bar-wrap"><div class="load-bar" id="lbar"></div></div>
+  <div class="load-txt" id="ltxt">Cargando mundos...</div>
 </div>
-<div class="rotate-hint">Gira el teléfono a horizontal para ver mejor</div>
-<div id="viewport">
-  <div id="stage">
-    <div id="shaker">
-      <canvas id="bgc" width="1600" height="900"></canvas>
-      <div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
 
-      <section id="scr-start" class="screen"></section>
-      <section id="scr-map" class="screen"></section>
-      <section id="scr-battle" class="screen"></section>
-      <section id="scr-victory" class="screen"></section>
-      <section id="scr-defeat" class="screen"></section>
-      <section id="scr-transition" class="screen"></section>
-      <section id="scr-final" class="screen"></section>
+<div id="s-start" class="screen"></div>
+<div id="s-brief" class="screen"></div>
+<div id="s-battle" class="screen"></div>
+<div id="s-victory" class="screen"></div>
+<div id="s-defeat" class="screen"></div>
+<div id="s-trans" class="screen"></div>
+<div id="s-final" class="screen"></div>
 
-      <canvas id="fxc" width="1600" height="900"></canvas>
-      <div id="hud">
-        <button id="btn-sound" class="hud-btn" title="Sonido">&#128266;</button>
-        <button id="btn-full" class="hud-btn" title="Pantalla completa (F)">&#x26F6;</button>
-        <button id="btn-reset" class="hud-btn" title="Reiniciar aventura">&#8634;</button>
-      </div>
-      <div id="hint-bar"><b>F</b> pantalla completa &nbsp;&middot;&nbsp; <b>1-4</b> / <b>A-D</b> responder &nbsp;&middot;&nbsp; <b>Enter</b> continuar</div>
-    </div>
-  </div>
-</div>
-<script src="js/juego.js" defer></script>
+<script src="js/juego-v3.js" defer></script>
 </body>
 </html>

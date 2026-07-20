@@ -1,147 +1,51 @@
 {
   "version": 3,
-  "canvas": [
-    896,
-    1200
-  ],
+  "canvas": [896, 1200],
   "fps": {
-    "idle": 8,
     "move": 10,
     "attack": 12,
     "hit": 10
   },
   "counts": {
-    "idle": 8,
     "move": 8,
     "attack": 8,
     "hit": 6
   },
   "characters": {
     "doctor": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/doctor/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/doctor/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/doctor/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/doctor/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/doctor/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/doctor/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/doctor/hit/frame-{ii}.png" }
     },
     "enfermera": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/enfermera/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/enfermera/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/enfermera/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/enfermera/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/enfermera/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/enfermera/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/enfermera/hit/frame-{ii}.png" }
     },
     "cirujano": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/cirujano/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/cirujano/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/cirujano/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/cirujano/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/cirujano/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/cirujano/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/cirujano/hit/frame-{ii}.png" }
     },
     "terapeuta": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/terapeuta/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/terapeuta/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/terapeuta/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/terapeuta/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/terapeuta/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/terapeuta/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/terapeuta/hit/frame-{ii}.png" }
     },
     "recepcionista": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/recepcionista/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/recepcionista/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/recepcionista/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/recepcionista/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/recepcionista/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/recepcionista/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/recepcionista/hit/frame-{ii}.png" }
     },
     "bacteriologa": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/bacteriologa/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/bacteriologa/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/bacteriologa/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/bacteriologa/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/bacteriologa/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/bacteriologa/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/bacteriologa/hit/frame-{ii}.png" }
     },
     "monstruo": {
-      "idle": {
-        "frames": 8,
-        "path": "image/anim-v3/monstruo/idle/frame-{ii}.png"
-      },
-      "move": {
-        "frames": 8,
-        "path": "image/anim-v3/monstruo/move/frame-{ii}.png"
-      },
-      "attack": {
-        "frames": 8,
-        "path": "image/anim-v3/monstruo/attack/frame-{ii}.png"
-      },
-      "hit": {
-        "frames": 6,
-        "path": "image/anim-v3/monstruo/hit/frame-{ii}.png"
-      }
+      "move": { "frames": 8, "path": "image/anim-v3/monstruo/move/frame-{ii}.png" },
+      "attack": { "frames": 8, "path": "image/anim-v3/monstruo/attack/frame-{ii}.png" },
+      "hit": { "frames": 6, "path": "image/anim-v3/monstruo/hit/frame-{ii}.png" }
     }
   }
 }
