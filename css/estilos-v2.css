@@ -3,8 +3,8 @@
   --gold:#f8c848; --gold-hi:#fff3c4;
   --ink:#eef2ff; --dim:#8b93a7;
   --panel:rgba(10,16,38,.94);
-  --font-title:Impact,'Arial Black','Franklin Gothic Bold','Segoe UI',sans-serif;
-  --font-body:'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --font-title:'Montserrat',system-ui,sans-serif;
+  --font-body:'Montserrat',system-ui,sans-serif;
   --wc:#8b5cf6;
 }
 html,body{height:100%}

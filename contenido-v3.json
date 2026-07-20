@@ -1,39 +1,37 @@
 {
-  "version": 2,
+  "version": 3,
   "meta": {
     "title": "Mentes Brillantes V3",
     "subtitle": "Trivia Demo Day · Grupo 1A",
-    "editar": "Cada misión usa: caso, q, a (4 opciones), c (índice 0-3), ok, bad, tip."
+    "editar": "Cada mundo tiene 1 misión: caso, q, a (4 opciones), c (índice 0-3), ok, bad, tip."
   },
   "ui": {
     "startBg": "image/v3/bg/start-clean.png",
     "finalBg": "image/v3/bg/final-clean.png",
-    "logo": "image/v3/bg/logo.png",
+    "logo": "image/v3/bg/logo-mentes.png",
     "timerSec": 10
   },
   "worlds": [
     {
-      "name": "Viva 1A IPS",
-      "topic": "VIVA 1A",
-      "c": "#0091d5",
-      "cd": "#0d2b4e",
-      "cl": "#dbeafe",
+      "name": "Estrategia de Innovación",
+      "topic": "ESTRATEGIA",
+      "c": "#a855f7",
+      "cd": "#4c1d95",
+      "cl": "#e9d5ff",
       "monster": "Sombra de la Duda",
-      "icon": "image/v2/world-estrategia.png",
+      "icon": "image/v3/bg/planet-estrategia.png",
       "hero": {
-        "name": "Dra. Lyra",
+        "name": "Dr. Aelion",
         "img": "image/doctor.png",
         "anim": "doctor"
       },
       "briefing": {
-        "goal": "Demuestra lo que sabes sobre Viva 1A IPS: qué es, su radar, gobierno, proceso, cultura y retos de innovación.",
-        "threat": "La Sombra de la Duda aparece cuando el equipo no conoce el sistema de innovación de Viva 1A.",
-        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day · Cámara de Comercio de Bogotá · Sello BPI."
+        "goal": "Demuestra lo que sabes sobre Viva 1A IPS y su estrategia de innovación.",
+        "threat": "La Sombra de la Duda aparece cuando el equipo no conoce el sistema de innovación.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
       },
       "learnings": [
-        "Viva 1A es una IPS ambulatoria con énfasis en atención primaria.",
-        "El Sponsor Ejecutivo de Innovación es el Gerente General.",
-        "AICURA es el reto B2C digital en construcción nacido de este sistema."
+        "Viva 1A es una IPS ambulatoria con énfasis en atención primaria."
       ],
       "missions": [
         {
@@ -49,21 +47,39 @@
           "ok": "Correcto: Viva 1A IPS es una institución prestadora de servicios de salud ambulatoria con énfasis en atención primaria.",
           "bad": "No es software, ni una red de startups, ni solo un programa cultural: es una IPS ambulatoria de atención primaria.",
           "tip": "Recuerda el rol asistencial de Viva 1A: atención primaria ambulatoria."
-        },
-        {
-          "caso": "El equipo revisa el radar de innovación de Viva 1A para priorizar focos.",
-          "q": "Según el radar de innovación, ¿en qué focos tiene Viva 1A sus mayores brechas?",
-          "a": [
-            "Performance de producto y sistema de producto",
-            "Cultura y gestión del conocimiento",
-            "Procesos, modelo de negocio y segmento B2C",
-            "Innovación abierta y proceso"
-          ],
-          "c": 2,
-          "ok": "Correcto: las mayores brechas están en procesos, modelo de negocio y segmento B2C.",
-          "bad": "El radar señala brechas prioritarias en procesos, modelo de negocio y B2C.",
-          "tip": "Al priorizar innovación, mira primero las brechas del radar, no solo las ideas más ruidosas."
-        },
+        }
+      ],
+      "bg": {
+        "battle": "image/v3/bg/mundo1.png",
+        "victory": "image/v3/bg/w1-estrategia-victory-clean.png",
+        "defeat": "image/v3/bg/w1-estrategia-defeat-clean.png",
+        "transition": "image/v3/bg/w1-estrategia-transition-clean.png"
+      },
+      "monsterAnim": "monstruo",
+      "charAvatar": "image/v3/bg/w1-estrategia-char.png"
+    },
+    {
+      "name": "Gobierno de Innovación",
+      "topic": "GOBIERNO",
+      "c": "#ed7d31",
+      "cd": "#7c2d12",
+      "cl": "#ffedd5",
+      "monster": "Barón de la Burocracia",
+      "icon": "image/v3/bg/planet-gobierno.png",
+      "hero": {
+        "name": "Lyra",
+        "img": "image/enfermera.png",
+        "anim": "enfermera"
+      },
+      "briefing": {
+        "goal": "Demuestra lo que sabes sobre el gobierno de innovación de Viva 1A.",
+        "threat": "El Barón de la Burocracia gana cuando nadie recuerda quién decide en innovación.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
+      },
+      "learnings": [
+        "El Sponsor Ejecutivo de Innovación es el Gerente General."
+      ],
+      "missions": [
         {
           "caso": "Se define el gobierno de innovación de Viva 1A y sus roles clave.",
           "q": "En el gobierno de Viva 1A, ¿quién ejerce como Sponsor Ejecutivo de Innovación?",
@@ -77,7 +93,39 @@
           "ok": "Correcto: el Sponsor Ejecutivo de Innovación es el Gerente General.",
           "bad": "En Viva 1A el sponsorship ejecutivo de innovación lo ejerce el Gerente General.",
           "tip": "Sin sponsor ejecutivo, la innovación se queda en ideas sin respaldo."
-        },
+        }
+      ],
+      "bg": {
+        "battle": "image/v3/bg/mundo2.png",
+        "victory": "image/v3/bg/w2-gobierno-victory-clean.png",
+        "defeat": "image/v3/bg/w2-gobierno-defeat-clean.png",
+        "transition": "image/v3/bg/w2-gobierno-transition-clean.png"
+      },
+      "monsterAnim": "monstruo",
+      "charAvatar": "image/v3/bg/w2-gobierno-char.png"
+    },
+    {
+      "name": "Proceso de Innovación",
+      "topic": "PROCESO",
+      "c": "#eab308",
+      "cd": "#713f12",
+      "cl": "#fef9c3",
+      "monster": "Caos Operativo",
+      "icon": "image/v3/bg/planet-proceso.png",
+      "hero": {
+        "name": "Thalric",
+        "img": "image/cirujano.png",
+        "anim": "cirujano"
+      },
+      "briefing": {
+        "goal": "Demuestra lo que sabes sobre el proceso de innovación de Viva 1A.",
+        "threat": "El Caos Operativo aparece cuando las ideas avanzan sin criterio ni retorno.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
+      },
+      "learnings": [
+        "En el proceso, además de priorizar y clasificar, se calcula el retorno."
+      ],
+      "missions": [
         {
           "caso": "Una idea ya aprobada avanza en el proceso de innovación.",
           "q": "En la fase de proceso donde la idea aprobada avanza, ¿qué se le calcula además de priorizarla y clasificarla?",
@@ -91,7 +139,39 @@
           "ok": "Correcto: además de priorizarla y clasificarla, se calcula el retorno.",
           "bad": "En esa fase se calcula el retorno de la idea, no la antigüedad del creador ni el número de embajadores.",
           "tip": "Priorizar sin estimar retorno es avanzar a ciegas."
-        },
+        }
+      ],
+      "bg": {
+        "battle": "image/v3/bg/mundo3.png",
+        "victory": "image/v3/bg/w3-proceso-victory-clean.png",
+        "defeat": "image/v3/bg/w3-proceso-defeat-clean.png",
+        "transition": "image/v3/bg/w3-proceso-transition-clean.png"
+      },
+      "monsterAnim": "monstruo",
+      "charAvatar": "image/v3/bg/w3-proceso-char.png"
+    },
+    {
+      "name": "Cultura de Innovación",
+      "topic": "CULTURA",
+      "c": "#22c55e",
+      "cd": "#14532d",
+      "cl": "#dcfce7",
+      "monster": "Resistencia al Cambio",
+      "icon": "image/v3/bg/planet-cultura.png",
+      "hero": {
+        "name": "Sylvaine",
+        "img": "image/terapeuta.png",
+        "anim": "terapeuta"
+      },
+      "briefing": {
+        "goal": "Demuestra lo que sabes sobre la cultura de innovación en Viva 1A.",
+        "threat": "La Resistencia al Cambio crece cuando nadie mide la capacidad de innovar del equipo.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
+      },
+      "learnings": [
+        "La capacidad de innovación se mide con autoevaluación y la mirada del líder directo."
+      ],
+      "missions": [
         {
           "caso": "El área de talento quiere medir la capacidad de innovación del personal.",
           "q": "¿Cómo se mide la capacidad de innovación de cada persona en Viva 1A?",
@@ -105,7 +185,85 @@
           "ok": "Correcto: se mide con autoevaluación y la mirada del líder directo.",
           "bad": "No depende solo de un examen o del Comité Chief: combina autoevaluación y visión del líder.",
           "tip": "La capacidad de innovar se construye y se observa en el día a día, no solo en un piloto."
-        },
+        }
+      ],
+      "bg": {
+        "battle": "image/v3/bg/mundo4.png",
+        "victory": "image/v3/bg/w4-cultura-victory-clean.png",
+        "defeat": "image/v3/bg/w4-cultura-defeat-clean.png",
+        "transition": "image/v3/bg/w4-cultura-transition-clean.png"
+      },
+      "monsterAnim": "monstruo",
+      "charAvatar": "image/v3/bg/w4-cultura-char.png"
+    },
+    {
+      "name": "Gestión del Conocimiento",
+      "topic": "CONOCIMIENTO",
+      "c": "#3b82f6",
+      "cd": "#1e3a8a",
+      "cl": "#dbeafe",
+      "monster": "Olvido Organizacional",
+      "icon": "image/v3/bg/planet-conocimiento.png",
+      "hero": {
+        "name": "Freya",
+        "img": "image/recepcionista.png",
+        "anim": "recepcionista"
+      },
+      "briefing": {
+        "goal": "Demuestra lo que sabes sobre el radar y las brechas de innovación de Viva 1A.",
+        "threat": "El Olvido Organizacional aparece cuando nadie mira el radar de innovación.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
+      },
+      "learnings": [
+        "Las mayores brechas del radar están en procesos, modelo de negocio y segmento B2C."
+      ],
+      "missions": [
+        {
+          "caso": "El equipo revisa el radar de innovación de Viva 1A para priorizar focos.",
+          "q": "Según el radar de innovación, ¿en qué focos tiene Viva 1A sus mayores brechas?",
+          "a": [
+            "Performance de producto y sistema de producto",
+            "Cultura y gestión del conocimiento",
+            "Procesos, modelo de negocio y segmento B2C",
+            "Innovación abierta y proceso"
+          ],
+          "c": 2,
+          "ok": "Correcto: las mayores brechas están en procesos, modelo de negocio y segmento B2C.",
+          "bad": "El radar señala brechas prioritarias en procesos, modelo de negocio y B2C.",
+          "tip": "Al priorizar innovación, mira primero las brechas del radar, no solo las ideas más ruidosas."
+        }
+      ],
+      "bg": {
+        "battle": "image/v3/bg/mundo5.png",
+        "victory": "image/v3/bg/w5-conocimiento-victory-clean.png",
+        "defeat": "image/v3/bg/w5-conocimiento-defeat-clean.png",
+        "transition": "image/v3/bg/w5-conocimiento-transition-clean.png"
+      },
+      "monsterAnim": "monstruo",
+      "charAvatar": "image/v3/bg/w5-conocimiento-char.png"
+    },
+    {
+      "name": "Ecosistema de Innovación",
+      "topic": "ECOSISTEMA",
+      "c": "#ef4444",
+      "cd": "#7f1d1d",
+      "cl": "#fee2e2",
+      "monster": "Aislamiento",
+      "icon": "image/v3/bg/planet-ecosistema.png",
+      "hero": {
+        "name": "Vexara",
+        "img": "image/bacteriologa.png",
+        "anim": "bacteriologa"
+      },
+      "briefing": {
+        "goal": "Demuestra lo que sabes sobre los retos nacidos del sistema Mentes Brillantes.",
+        "threat": "El Aislamiento gana cuando el equipo no conoce los retos en construcción.",
+        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day."
+      },
+      "learnings": [
+        "AICURA es el reto B2C digital en construcción nacido de este sistema."
+      ],
+      "missions": [
         {
           "caso": "El equipo presenta los retos de innovación nacidos del sistema Mentes Brillantes.",
           "q": "¿Qué reto de innovación de Viva 1A está hoy en construcción y nació de este sistema?",
@@ -122,131 +280,13 @@
         }
       ],
       "bg": {
-        "battle": "image/v3/bg/w1-estrategia-battle-clean.png",
-        "victory": "image/v3/bg/w1-estrategia-victory-clean.png",
-        "defeat": "image/v3/bg/w1-estrategia-defeat-clean.png",
-        "transition": "image/v3/bg/w1-estrategia-transition-clean.png"
+        "battle": "image/v3/bg/mundo 6.png",
+        "victory": "image/v3/bg/w6-ecosistema-victory-clean.png",
+        "defeat": "image/v3/bg/w6-ecosistema-defeat-clean.png",
+        "transition": "image/v3/bg/w6-ecosistema-transition-clean.png"
       },
       "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w1-estrategia-char.png"
-    },
-    {
-      "name": "Everest Intelligent",
-      "topic": "EVEREST",
-      "c": "#ed7d31",
-      "cd": "#7c2d12",
-      "cl": "#ffedd5",
-      "monster": "Barón de la Burocracia",
-      "icon": "image/v2/world-gobierno.png",
-      "hero": {
-        "name": "Enf. Elowen",
-        "img": "image/enfermera.png",
-        "anim": "enfermera"
-      },
-      "briefing": {
-        "goal": "Demuestra lo que sabes sobre Everest Intelligent: qué es, su gobierno, proceso, evaluación, cultura y retos.",
-        "threat": "El Barón de la Burocracia gana cuando nadie recuerda cómo funciona el sistema de innovación de Everest.",
-        "context": "Trivia oficial · Sistema Mentes Brillantes · Grupo 1A · Demo Day · Cámara de Comercio de Bogotá · Sello BPI."
-      },
-      "learnings": [
-        "Everest Intelligent es el software clínico-administrativo de IPS, EPS y operadores.",
-        "En la fase Diseña, el Embajador de Innovación conceptualiza con el Creador.",
-        "Continuum es el reto de Everest nacido de este sistema, hoy en prototipo."
-      ],
-      "missions": [
-        {
-          "caso": "Presentación institucional de Everest Intelligent en el Sistema Mentes Brillantes.",
-          "q": "¿Qué es Everest Intelligent?",
-          "a": [
-            "Una aseguradora de salud",
-            "El software que usan IPS, EPS y operadores de salud para su información clínica y administrativa",
-            "Una IPS de atención presencial",
-            "Una red de aliados externos"
-          ],
-          "c": 1,
-          "ok": "Correcto: Everest Intelligent es el software que usan IPS, EPS y operadores para información clínica y administrativa.",
-          "bad": "No es una aseguradora ni una IPS presencial: es el software clínico-administrativo del ecosistema.",
-          "tip": "Piensa en Everest como la plataforma de información, no como el prestador."
-        },
-        {
-          "caso": "Se revisa el gobierno de innovación de Everest y sus roles.",
-          "q": "En el gobierno de Everest, ¿quién ejerce como Sponsor Ejecutivo?",
-          "a": [
-            "El Chief de Innovación Corporativo",
-            "El Líder de Innovación",
-            "El Gerente General",
-            "El CIO"
-          ],
-          "c": 2,
-          "ok": "Correcto: el Sponsor Ejecutivo es el Gerente General.",
-          "bad": "En Everest el Sponsor Ejecutivo también es el Gerente General.",
-          "tip": "El sponsorship ejecutivo da prioridad y recursos a la innovación."
-        },
-        {
-          "caso": "Una idea entra a la fase Diseña del proceso de innovación.",
-          "q": "En la fase \"Diseña\" del proceso, ¿quién conceptualiza la idea junto al Creador?",
-          "a": [
-            "El Comité Innoday",
-            "El CIO",
-            "El Líder de Innovación",
-            "El Embajador de Innovación"
-          ],
-          "c": 3,
-          "ok": "Correcto: el Embajador de Innovación conceptualiza la idea junto al Creador.",
-          "bad": "En Diseña, quien acompaña al Creador es el Embajador de Innovación.",
-          "tip": "El embajador traduce la idea del creador a un concepto workable."
-        },
-        {
-          "caso": "El embudo de evaluación filtra ideas según puntaje.",
-          "q": "¿Cuántos puntos necesita una idea para avanzar en el embudo de evaluación?",
-          "a": [
-            "Más de 10 sobre 25",
-            "Más de 15 sobre 25",
-            "Más de 20 sobre 25",
-            "Los 25 sobre 25"
-          ],
-          "c": 1,
-          "ok": "Correcto: necesita más de 15 sobre 25 para avanzar.",
-          "bad": "El umbral de avance es más de 15 puntos sobre 25, no la nota perfecta.",
-          "tip": "Memoriza el corte: >15/25."
-        },
-        {
-          "caso": "Se refuerza la cultura de Mentes Brillantes en el equipo.",
-          "q": "¿Cuál es el lema de la cultura de Mentes Brillantes?",
-          "a": [
-            "\"El futuro nos espera\"",
-            "\"Lo que no está roto, rómpelo\"",
-            "\"Innovar es cuestión de suerte\"",
-            "\"Primero perfeccionar, después proponer\""
-          ],
-          "c": 1,
-          "ok": "Correcto: el lema es \"Lo que no está roto, rómpelo\".",
-          "bad": "El lema cultural de Mentes Brillantes es \"Lo que no está roto, rómpelo\".",
-          "tip": "Innovar también es cuestionar lo que 'ya funciona'."
-        },
-        {
-          "caso": "El equipo muestra los retos nacidos del sistema en Everest.",
-          "q": "¿Qué reto de Everest nació de este sistema y hoy está en prototipo?",
-          "a": [
-            "AICURA",
-            "OMMEDICALL",
-            "Innovaitors",
-            "Continuum"
-          ],
-          "c": 3,
-          "ok": "Correcto: Continuum nació de este sistema y hoy está en prototipo.",
-          "bad": "El reto de Everest en prototipo es Continuum (AICURA es de Viva 1A).",
-          "tip": "Asocia cada organización con su reto: Everest → Continuum."
-        }
-      ],
-      "bg": {
-        "battle": "image/v3/bg/w2-gobierno-battle-clean.png",
-        "victory": "image/v3/bg/w2-gobierno-victory-clean.png",
-        "defeat": "image/v3/bg/w2-gobierno-defeat-clean.png",
-        "transition": "image/v3/bg/w2-gobierno-transition-clean.png"
-      },
-      "monsterAnim": "monstruo",
-      "charAvatar": "image/v3/bg/w2-gobierno-char.png"
+      "charAvatar": "image/v3/bg/w6-ecosistema-char.png"
     }
   ]
 }
