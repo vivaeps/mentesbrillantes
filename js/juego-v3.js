@@ -38,7 +38,7 @@ const go = id => {
 const S = {
   screen: 'load', current: 0, conquered: [], totalOK: 0, totalQ: 0
 };
-let B = null, tmr = null, tLeft = 10, players = new WeakMap();
+let B = null, tmr = null, tLeft = 15, players = new WeakMap();
 let stopCinematic = null;
 
 /* Videos de carga por héroe (viaje / victoria / derrota). */
@@ -646,7 +646,7 @@ function clearTimer() { if (tmr) { clearInterval(tmr); tmr = null; } }
 
 function startTimer() {
   clearTimer();
-  tLeft = DATA.ui.timerSec || 10;
+  tLeft = DATA.ui.timerSec || 15;
   updTimer();
   tmr = setInterval(() => {
     tLeft--;
@@ -659,7 +659,7 @@ function updTimer() {
   const n = $('#tnum'), b = $('#tbar');
   if (!n || !b) return;
   n.textContent = tLeft;
-  b.style.width = (tLeft / (DATA.ui.timerSec || 10) * 100) + '%';
+  b.style.width = (tLeft / (DATA.ui.timerSec || 15) * 100) + '%';
   if (tLeft <= 3) { b.style.background = '#ff3333'; n.classList.add('red'); }
   else if (tLeft <= 6) { b.style.background = '#ff8c00'; n.classList.remove('red'); }
   else { b.style.background = '#00c850'; n.classList.remove('red'); }
@@ -675,7 +675,7 @@ function renderQ() {
     <div class="q-head">
       <div class="tbar-w"><div class="tbar" id="tbar" style="width:100%"></div></div>
       <div class="timer-pill" aria-live="polite">
-        <span class="tnum" id="tnum">${DATA.ui.timerSec || 10}</span>
+        <span class="tnum" id="tnum">${DATA.ui.timerSec || 15}</span>
         <span class="tlabel">seg</span>
       </div>
     </div>

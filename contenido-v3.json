@@ -9,7 +9,7 @@
     "startBg": "image/v3/bg/start-clean.png",
     "finalBg": "image/v3/bg/final-clean.png",
     "logo": "image/v3/bg/logo-mentes.png",
-    "timerSec": 10
+    "timerSec": 15
   },
   "worlds": [
     {
