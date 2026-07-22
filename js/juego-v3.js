@@ -515,7 +515,7 @@ function renderStart() {
   const nextOpen = S.conquered.indexOf(false);
 
   s.innerHTML = `
-    <div class="dim soft"></div>
+    <div class="dim"></div>
     <div class="hub">
       <div class="hub-head">
         <h1 class="hub-title gold-text">Mundos conquistados: ${wonCount}/${WORLDS.length}</h1>

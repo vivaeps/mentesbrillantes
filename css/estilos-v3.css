@@ -72,6 +72,11 @@ body{
 
 /* HUB INICIO — galaxia de 6 mundos */
 #s-start{justify-content:stretch;align-items:stretch;overflow:hidden}
+#s-start .dim{
+  background:rgba(2,6,20,.42);
+  backdrop-filter:blur(3px) saturate(.9);
+  -webkit-backdrop-filter:blur(3px) saturate(.9);
+}
 .hub{
   position:relative;z-index:2;flex:1;width:100%;min-height:0;
   display:flex;flex-direction:column;

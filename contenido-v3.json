@@ -6,7 +6,7 @@
     "editar": "Cada mundo tiene 1 misión: caso, q, a (4 opciones), c (índice 0-3), ok, bad, tip."
   },
   "ui": {
-    "startBg": "image/v3/bg/start-clean.png",
+    "startBg": "image/v3/bg/iniciomentesbrillantes.jpeg",
     "finalBg": "image/v3/bg/final-clean.png",
     "logo": "image/v3/bg/logo-mentes.png",
     "timerSec": 15
