@@ -40,6 +40,19 @@ const S = {
 };
 let B = null, tmr = null, tLeft = 15, players = new WeakMap();
 let stopCinematic = null;
+let bgm = null;
+
+/** Música de fondo: arranca al elegir el primer mundo y sigue en loop. */
+function startBgm() {
+  if (bgm) {
+    if (bgm.paused) bgm.play().catch(() => {});
+    return;
+  }
+  bgm = new Audio('image/SonidoViva.mp3');
+  bgm.loop = true;
+  bgm.volume = 0.55;
+  bgm.play().catch(() => {});
+}
 
 /* Videos de carga por héroe (viaje / victoria / derrota). */
 const HERO_CLIPS = {
@@ -444,6 +457,7 @@ function toast(msg) {
 async function goToWorld(i) {
   S.current = i;
   save();
+  startBgm();
   await preloadHeroAnims(currentHero());
   renderTrans(i);
 }
@@ -769,11 +783,13 @@ function renderVictory() {
   scr.innerHTML = `
     <div class="video-actions video-actions-over">
       <p class="video-caption">Mundo ${i + 1}: ${w.name}</p>
-      ${allDone
-        ? `<button class="btn bg" id="btnVFinal">VER RESULTADO FINAL</button>`
-        : `<button class="btn bg" id="btnVNext">SIGUIENTE MUNDO →</button>`
-      }
-      <button class="btn ghost" id="btnVHome">INICIO</button>
+      <div class="video-actions-row">
+        ${allDone
+          ? `<button class="btn bg" id="btnVFinal">VER RESULTADO FINAL</button>`
+          : `<button class="btn bg" id="btnVNext">SIGUIENTE MUNDO&nbsp;→</button>`
+        }
+        <button class="btn ghost" id="btnVHome">INICIO</button>
+      </div>
     </div>`;
   startCinematicLoop(scr, clips.victory);
   $('#btnVHome').onclick = () => {

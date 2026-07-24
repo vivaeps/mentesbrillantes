@@ -398,6 +398,15 @@ body{
   display:flex;flex-direction:column;align-items:center;gap:10px
 }
 .video-actions-over .btn,.defeat-actions-over .btn{width:100%;min-height:50px}
+.video-actions-row{
+  display:flex;flex-direction:row;align-items:stretch;justify-content:center;
+  gap:10px;width:100%;max-width:560px
+}
+.video-actions-row .btn{
+  width:auto;flex:1 1 0;min-width:0;min-height:52px;
+  white-space:nowrap;padding:12px 16px;line-height:1.2
+}
+.video-actions-over:has(.video-actions-row){max-width:560px}
 .video-caption{
   margin:0;text-align:center;font-size:clamp(12px,3vw,14px);color:#e8eefc;
   text-shadow:0 2px 10px #000;background:rgba(2,8,24,.55);
